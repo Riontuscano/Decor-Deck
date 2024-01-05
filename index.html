@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decor-Deck :- An Online Furniture App | Augmented Furniture Model | Cool Furniture Designs | Easy Return
+        policy | Convenient Payment Option </title>
+    <meta name="title" content="Decor-Deck">
+    <meta name="description" content=" An Online Furniture App with implementation of Augmented reality">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="./css/swiper-bundle.min.css">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/c8e4d183c2.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <header>
+        <p href="#" class="logo">Decor<span>Deck</span></p>
+        <div class="bx bx-menu" id="menu-icon"></div>
+
+
+
+        <ul class="navbar">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#shop">Shop</a></li>
+            <!-- <li><a href="#new">New Launch</a></li> -->
+            <li><a href="#about">About</a></li>
+            <li><a href="#blog">Blog</a></li>
+            <li><a href="#aug">Try Augmented</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <ul class="auth">
+            <li class="btn1"><a href="signup.html">Signup</a></li>
+            <li class="btn1"><a href="login.html">Login</a></li>
+        </ul>
+
+    </header>
+    <section class="home" id="home">
+        <div class="home_txt">
+            <h1><span class="color">Your</span> Comfort <br><span class="auto-type2"> At Your<span class="color">
+                        Doorstep</span></h1></span>
+            <p>
+                Say goodbye to endless store visits and hello to your dream home! <br> Our Furniture app puts the power
+                of furnishing your space right in your pocket. <br>
+                With Augmented feature try what you like wherever you like !!
+
+            </p>
+            <!-- <h1>Get <span class="auto-type"></span></h1><br> -->
+            <a href="#shop" class="btn2">Check Out</a>
+        </div>
+    </section>
+
+    <section class="shop" id="new">
+        <div class="heading">
+            <h5>New Launch</h5>
+            <h2>Shop Now</h2>
+        </div>
+        <div class="division">
+            <ul class="items">
+                <li onclick="change(1)"><a href="#chair">Chair</a></li>
+                <li onclick="change(2)"><a href="#sofa">Sofa</a></li>
+                <li onclick="change(3)"><a href="#Table">Table</a></li>
+                <li onclick="change(4)"><a href="#Bed">bed</a></li>
+            </ul>
+        </div>
+        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
+            <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
+          </svg> -->
+        <div class="shop-container">
+            <div class="box">
+                <div class="box-img">
+                    <img src="/img/chair5.jpg" alt="chair_img">
+                </div>
+                <div class="title-price">
+                    <h3>Pink Lawn Chair</h3>
+                    <div class="stars">
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <!-- <ion-icon name="star-half" class="bx"></ion-icon> -->
+                    </div>
+                </div>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-currency-rupee" viewBox="0 0 16 16">
+                        <path
+                            d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4z" />
+                    </svg>4999</span>
+                <div class="bx-cart">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-cart3" viewBox="0 0 16 16">
+                        <path
+                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+                    </svg>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-img">
+                    <img src="/img/chair2.jpg" alt="chair_img">
+                </div>
+                <div class="title-price">
+                    <h3>Grey Chair</h3>
+                    <div class="stars">
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star-half" class="bx"></ion-icon>
+                    </div>
+                </div>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-currency-rupee" viewBox="0 0 16 16">
+                        <path
+                            d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4z" />
+                    </svg>4499</span>
+                <div class="bx-cart">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-cart3" viewBox="0 0 16 16">
+                        <path
+                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+                    </svg>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-img">
+                    <img src="/img/chair3.jpg" alt="chair_img">
+                </div>
+                <div class="title-price">
+                    <h3>Massage Chair</h3>
+                    <div class="stars">
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <!-- <ion-icon name="star-half" class="bx"></ion-icon> -->
+                    </div>
+                </div>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-currency-rupee" viewBox="0 0 16 16">
+                        <path
+                            d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4z" />
+                    </svg>14999</span>
+                <div class="bx-cart">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-cart3" viewBox="0 0 16 16">
+                        <path
+                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+                    </svg>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-img">
+                    <img src="/img/chair4.webp" alt="chair_img">
+                </div>
+                <div class="title-price">
+                    <h3>Sofa Chair</h3>
+                    <div class="stars">
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <!-- <ion-icon name="star-half" class="bx"></ion-icon> -->
+                    </div>
+                </div>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-currency-rupee" viewBox="0 0 16 16">
+                        <path
+                            d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4z" />
+                    </svg>3999</span>
+                <div class="bx-cart">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-cart3" viewBox="0 0 16 16">
+                        <path
+                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+                    </svg>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-img">
+                    <img src="/img/chair1.jpg" alt="chair_img">
+                </div>
+                <div class="title-price">
+                    <h3>Orange Cushion Chair</h3>
+                    <div class="stars">
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star-half" class="bx"></ion-icon>
+                    </div>
+                </div>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-currency-rupee" viewBox="0 0 16 16">
+                        <path
+                            d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4z" />
+                    </svg>4999</span>
+                <div class="bx-cart">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-cart3" viewBox="0 0 16 16">
+                        <path
+                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+                    </svg>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-img">
+                    <img src="/img/chair6.webp" alt="chair_img">
+                </div>
+                <div class="title-price">
+                    <h3>Gaming Chair</h3>
+                    <div class="stars">
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star-half" class="bx"></ion-icon>
+                    </div>
+                </div>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-currency-rupee" viewBox="0 0 16 16">
+                        <path
+                            d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4z" />
+                    </svg>5499</span>
+                <div class="bx-cart">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-cart3" viewBox="0 0 16 16">
+                        <path
+                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="aug" id="aug">
+        <div class="heading">
+            <h5>Augmented Reality</h5>
+            <h3>Try Now</h3>
+        </div><br>
+        <div class="banner">
+            <img src="/img/aug3.webp" alt="">
+            <div class="banner-text">
+                <h2>Explore <span id="col">More</span></h2>
+                <a class="tryaug" href="#ar">Try Now</a>
+
+            </div>
+        </div>
+        <section class="tes" id="tes">
+            <div class="heading">
+                <h5>Testimonials</h5>
+                <h3>Customer Says</h3>
+            </div><br>
+            <div class="testimonial-box-container">
+               
+                <!--BOX-1-------------->
+                <div class="testimonial-box">
+                    <!--top------------------------->
+                    <div class="box-top">
+                        <!--profile----->
+                        <div class="profile">
+                            <!--img---->
+                            <div class="profile-img">
+                                <img src="/img/profile1.jpg" alt="profile" />
+                            </div>
+                            <!--name-and-username-->
+                            <div class="name-user">
+                                <strong>Touseeq Ijaz</strong>
+                                <span>@touseeqijazweb</span>
+                            </div>
+                        </div>
+                        <!--reviews------>
+                        <div class="reviews">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i><!--Empty star-->
+                        </div>
+                    </div>
+                    <!--Comments---------------------------------------->
+                    <div class="client-comment">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, quaerat quis? Provident temporibus architecto asperiores nobis maiores nisi a. Quae doloribus ipsum aliquam tenetur voluptates incidunt blanditiis sed atque cumque.</p>
+                      <div class="box-prof">
+                          <p>--Web developer</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="testimonial-box">
+                
+                    <div class="box-top">
+   
+                        <div class="profile">
+               
+                            <div class="profile-img">
+                                <img src="/img/profile2.jpeg" alt="profile"/>
+                            </div>
+                
+                            <div class="name-user">
+                                <strong>J.K Rowling</strong>
+                                <span>@jkrowling</span>
+                            </div>
+                        </div>
+                  
+                        <div class="reviews">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+               
+                    <div class="client-comment">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, quaerat quis? Provident temporibus architecto asperiores nobis maiores nisi a. Quae doloribus ipsum aliquam tenetur voluptates incidunt blanditiis sed atque cumque.</p>
+                        <div class="box-prof">
+                            <p>--Web developer</p>
+                          </div>
+                    </div>
+                </div>
+      
+                <div class="testimonial-box">
+                  
+                    <div class="box-top">
+                       
+                        <div class="profile">
+                         
+                            <div class="profile-img">
+                                <img src="/img/profile3.webp" alt="profile"/>
+                            </div>
+                          
+                            <div class="name-user">
+                                <strong>J.K Rowling</strong>
+                                <span>@jkrowling</span>
+                            </div>
+                        </div>
+                      
+                        <div class="reviews">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                  
+                    <div class="client-comment">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, quaerat quis? Provident .</p>
+                        <div class="box-prof">
+                            <p>--Web developer</p>
+                          </div>
+                    </div>
+                </div>
+            </div>
+            
+          <script src="./js/swiper-bundle.min.js"></script>
+          <script src="./js/script.js"></script>
+          <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+          <script>
+              var typed = new Typed(".auto-type", {
+                  strings: ["Chair", "Sofa", "Table", "Side Table", "Lamps"],
+                  typeSpeed: 30,
+                  backSpeed: 30,
+                  showCursor: false,
+                  loop: true
+              })
+          </script>
+</body>
+
+</html>
