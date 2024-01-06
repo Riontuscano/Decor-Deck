@@ -11,26 +11,17 @@
     <link rel="stylesheet" href="./css/style.css">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="./css/swiper-bundle.min.css">
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
-        <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-        <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-        <script src="https://kit.fontawesome.com/c8e4d183c2.js" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
     <header>
         <p href="#" class="logo">Decor<span>Deck</span></p>
         <div class="bx bx-menu" id="menu-icon"></div>
-
-
-
         <ul class="navbar">
             <li><a href="#home">Home</a></li>
             <li><a href="#shop">Shop</a></li>
@@ -40,16 +31,17 @@
             <li><a href="#aug">Try Augmented</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
-        <ul class="auth">
+        <!-- <ul class="auth">
             <li class="btn1"><a href="signup.html">Signup</a></li>
             <li class="btn1"><a href="login.html">Login</a></li>
-        </ul>
+        </ul> -->
 
     </header>
     <section class="home" id="home">
         <div class="home_txt">
             <!-- <h1>Decor-Deck</h1> -->
-            <h1><span class="color">Your</span> Comfort <br><span class="auto-type2"> At Your <span class="color1"></span></h1></span>
+            <h1><span class="color">Your</span> Comfort <br><span class="auto-type2"> At Your <span
+                        class="color1"></span></h1></span>
             <p>
                 Say goodbye to endless store visits and hello to your dream home! <br> Our Furniture app puts the power
                 of furnishing your space right in your pocket. <br>
@@ -73,11 +65,12 @@
                 <li onclick="change(3)"><a href="#Table">Table</a></li>
                 <li onclick="change(4)"><a href="#Bed">bed</a></li>
             </ul>
-        </div>
+        </div><br><br>
         <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
             <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
           </svg> -->
         <div class="shop-container">
+            
             <div class="box">
                 <div class="box-img">
                     <img src="/img/chair5.jpg" alt="chair_img">
@@ -252,6 +245,7 @@
         </div><br>
         <div class="banner">
             <img src="/img/aug3.webp" alt="">
+
             <div class="banner-text">
                 <h2>Explore <span id="col">More</span></h2>
                 <a class="tryaug" href="#ar">Try Now</a>
@@ -259,173 +253,351 @@
             </div>
         </div>
     </section>
-        <section class="tes" id="tes">
+    <section class="tes" id="tes">
+        <div class="heading">
+            <h5>Testimonials</h5>
+            <h3>Customer Says</h3>
+        </div><br>
+        <div class="testimonial-box-container">
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="testimonial-box">
+                            <!--top------------------------->
+                            <div class="box-top">
+                                <!--profile----->
+                                <div class="profile">
+                                    <!--img---->
+                                    <div class="profile-img">
+                                        <img src="/img/profile1.jpg" alt="profile" />
+                                    </div>
+                                    <!--name-and-username-->
+                                    <div class="name-user">
+                                        <strong>Touseeq Ijaz</strong>
+                                        <span>@touseeqijazweb</span>
+                                    </div>
+                                </div>
+                                <!--reviews------>
+                                <div class="reviews">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i><!--Empty star-->
+                                </div>
+                            </div>
+                            <!--Comments---------------------------------------->
+                            <div class="client-comment">
+                                <p>As a busy parent with limited time and a playful toddler, shopping for new furniture
+                                    can be a nightmare. This website's AR feature was a lifesaver! I could assess
+                                    furniture size and safety right in my kids' playroom, ensuring nothing would topple
+                                    over with a playful push. Seeing how a sturdy coffee table or a stain-resistant rug
+                                    would look in their space helped me make practical choices..</p>
+                                <div class="box-prof">
+                                    <p>--Web developer</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="testimonial-box">
+
+                            <div class="box-top">
+
+                                <div class="profile">
+
+                                    <div class="profile-img">
+                                        <img src="/img/profile2.jpeg" alt="profile" />
+                                    </div>
+
+                                    <div class="name-user">
+                                        <strong> Lisa H</strong>
+                                        <span>@Lisaharlo</span>
+                                    </div>
+                                </div>
+
+                                <div class="reviews">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+
+                            <div class="client-comment">
+                                <p>Finding stylish furniture on a budget was always a struggle. Until I discovered Decor
+                                    Deck! Their affordable price tags on well-designed pieces were too good to be true.
+                                    But fear not, budget-conscious friends! The quality is fantastic. I bought a sleek
+                                    dining table and chairs for my tiny apartment, and they instantly elevated the
+                                    space. The assembly instructions were clear and easy to follow, even for a DIY
+                                    novice like me.</p>
+                                <div class="box-prof">
+                                    <p>--Accountant</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="testimonial-box">
+
+                            <div class="box-top">
+
+                                <div class="profile">
+
+                                    <div class="profile-img">
+                                        <img src="/img/profile3.webp" alt="profile" />
+                                    </div>
+
+                                    <div class="name-user">
+                                        <strong>Arthur Westley</strong>
+                                        <span>@arthurwestley</span>
+                                    </div>
+                                </div>
+
+                                <div class="reviews">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+
+                            <div class="client-comment">
+                                <p>"I admit, I was skeptical about buying furniture online. But, FurnishFantastic
+                                    changed my mind. Their high-quality photos and detailed descriptions helped me
+                                    visualize each piece, and the filter options made narrowing down my choices
+                                    effortless. </p>
+                                <div class="box-prof">
+                                    <p>--Student</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="testimonial-box">
+
+                            <div class="box-top">
+
+                                <div class="profile">
+
+                                    <div class="profile-img">
+                                        <img src="/img/profile3.webp" alt="profile" />
+                                    </div>
+
+                                    <div class="name-user">
+                                        <strong>Arthur Westley</strong>
+                                        <span>@arthurwestley</span>
+                                    </div>
+                                </div>
+
+                                <div class="reviews">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+
+                            <div class="client-comment">
+                                <p>"I admit, I was skeptical about buying furniture online. But, FurnishFantastic
+                                    changed my mind. Their high-quality photos and detailed descriptions helped me
+                                    visualize each piece, and the filter options made narrowing down my choices
+                                    effortless. </p>
+                                <div class="box-prof">
+                                    <p>--Student</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="testimonial-box">
+
+                            <div class="box-top">
+
+                                <div class="profile">
+
+                                    <div class="profile-img">
+                                        <img src="/img/profile3.webp" alt="profile" />
+                                    </div>
+
+                                    <div class="name-user">
+                                        <strong>Arthur Westley</strong>
+                                        <span>@arthurwestley</span>
+                                    </div>
+                                </div>
+
+                                <div class="reviews">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+
+                            <div class="client-comment">
+                                <p>"I admit, I was skeptical about buying furniture online. But, FurnishFantastic
+                                    changed my mind. Their high-quality photos and detailed descriptions helped me
+                                    visualize each piece, and the filter options made narrowing down my choices
+                                    effortless. </p>
+                                <div class="box-prof">
+                                    <p>--Student</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="testimonial-box">
+
+                            <div class="box-top">
+
+                                <div class="profile">
+
+                                    <div class="profile-img">
+                                        <img src="/img/profile3.webp" alt="profile" />
+                                    </div>
+
+                                    <div class="name-user">
+                                        <strong>Arthur Westley</strong>
+                                        <span>@arthurwestley</span>
+                                    </div>
+                                </div>
+
+                                <div class="reviews">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+
+                            <div class="client-comment">
+                                <p>"I admit, I was skeptical about buying furniture online. But, FurnishFantastic
+                                    changed my mind. Their high-quality photos and detailed descriptions helped me
+                                    visualize each piece, and the filter options made narrowing down my choices
+                                    effortless. </p>
+                                <div class="box-prof">
+                                    <p>--Student</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="swiper-slide">Slide 7</div>
+                  <div class="swiper-slide">Slide 8</div>
+                  <div class="swiper-slide">Slide 9</div> -->
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+        <br><br>
+        <section class="getconnected" id="contact">
             <div class="heading">
-                <h5>Testimonials</h5>
-                <h3>Customer Says</h3>
-            </div><br>
-            <div class="testimonial-box-container">
-               
-                <!--BOX-1-------------->
-                <div class="testimonial-box">
-                    <!--top------------------------->
-                    <div class="box-top">
-                        <!--profile----->
-                        <div class="profile">
-                            <!--img---->
-                            <div class="profile-img">
-                                <img src="/img/profile1.jpg" alt="profile" />
-                            </div>
-                            <!--name-and-username-->
-                            <div class="name-user">
-                                <strong>Touseeq Ijaz</strong>
-                                <span>@touseeqijazweb</span>
-                            </div>
-                        </div>
-                        <!--reviews------>
-                        <div class="reviews">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="far fa-star"></i><!--Empty star-->
-                        </div>
-                    </div>
-                    <!--Comments---------------------------------------->
-                    <div class="client-comment">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, quaerat quis? Provident temporibus architecto asperiores nobis maiores nisi a. Quae doloribus ipsum aliquam tenetur voluptates incidunt blanditiis sed atque cumque.</p>
-                      <div class="box-prof">
-                          <p>--Web developer</p>
-                        </div>
-                    </div>
-                </div>
-            
-                <div class="testimonial-box">
-                
-                    <div class="box-top">
-   
-                        <div class="profile">
-               
-                            <div class="profile-img">
-                                <img src="/img/profile2.jpeg" alt="profile"/>
-                            </div>
-                
-                            <div class="name-user">
-                                <strong>J.K Rowling</strong>
-                                <span>@jkrowling</span>
-                            </div>
-                        </div>
-                  
-                        <div class="reviews">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-               
-                    <div class="client-comment">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, quaerat quis? Provident temporibus architecto asperiores nobis maiores nisi a. Quae doloribus ipsum aliquam tenetur voluptates incidunt blanditiis sed atque cumque.</p>
-                        <div class="box-prof">
-                            <p>--Web developer</p>
-                          </div>
-                    </div>
-                </div>
-      
-                <div class="testimonial-box">
-                  
-                    <div class="box-top">
-                       
-                        <div class="profile">
-                         
-                            <div class="profile-img">
-                                <img src="/img/profile3.webp" alt="profile"/>
-                            </div>
-                          
-                            <div class="name-user">
-                                <strong>J.K Rowling</strong>
-                                <span>@jkrowling</span>
-                            </div>
-                        </div>
-                      
-                        <div class="reviews">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                  
-                    <div class="client-comment">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, quaerat quis? Provident .</p>
-                        <div class="box-prof">
-                            <p>--Web developer</p>
-                          </div>
-                    </div>
-                </div>
+                <h5>Subscribe</h5>
+                <h3>Get Connected</h3>
             </div><br><br>
-            
-            <div class="footer-dark">
-                <footer>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-6 col-md-3 item">
-                                <h3>Services</h3>
-                                <ul>
-                                    <li><a href="#">Home Decor</a></li>
-                                    <li><a href="#">Furniture</a></li>
-                                    <li><a href="#">Home/Room Customization</a></li>
-                                </ul>
-                            </div>
-                            <div class="col-sm-6 col-md-3 item">
-                                <h3>About</h3>
-                                <ul>
-                                    <li><a href="#">Company</a></li>
-                                    <li><a href="#">Team</a></li>
-                                    <li><a href="#">Careers</a></li>
-                                </ul>
-                            </div>
-                            <div class="col-md-6 item text">
-                                <h3>Decor Deck</h3>
-                                <p>Praesent sed lobortis mi. Suspendisse vel placerat ligula. Vivamus ac sem lacus. Ut vehicula rhoncus elementum. Etiam quis tristique lectus. Aliquam in arcu eget velit pulvinar dictum vel in justo.</p>
-                            </div>
-                            <div class="col item social">
-
-                                <a href="#" class="facebook"><ion-icon name="logo-facebook" ></ion-icon></a>
-                                <a href="#" class="twitter"><ion-icon name="logo-twitter"></ion-icon></a>
-                                <a href="#" class="google"><ion-icon name="logo-google"></ion-icon></a>
-                                <a href="#" class="instagram"><ion-icon name="logo-instagram"></ion-icon></a>
-                            
-                            </div>
+        </section>
+        <div class="footer-dark">
+            <footer>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6 col-md-3 item">
+                            <h3>Services</h3>
+                            <ul>
+                                <li><a href="#">Home Decor</a></li>
+                                <li><a href="#">Furniture</a></li>
+                                <li><a href="#">Home/Room Customization</a></li>
+                            </ul>
                         </div>
-                        <p class="copyright">Copyright @2024 | Designed With by <u> Decor Deck </u></p>
+                        <div class="col-sm-6 col-md-3 item">
+                            <h3>About</h3>
+                            <ul>
+                                <li><a href="#">Company</a></li>
+                                <li><a href="#">Team</a></li>
+                                <li><a href="#">Careers</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6 item text">
+                            <h3>Decor Deck</h3>
+                            <p>Praesent sed lobortis mi. Suspendisse vel placerat ligula. Vivamus ac sem lacus. Ut
+                                vehicula rhoncus elementum. Etiam quis tristique lectus. Aliquam in arcu eget velit
+                                pulvinar dictum vel in justo.</p>
+                        </div>
+                        <div class="col item social">
+
+                            <a href="#" class="facebook"><ion-icon name="logo-facebook"></ion-icon></a>
+                            <a href="#" class="twitter"><ion-icon name="logo-twitter"></ion-icon></a>
+                            <a href="#" class="google"><ion-icon name="logo-google"></ion-icon></a>
+                            <a href="#" class="instagram"><ion-icon name="logo-instagram"></ion-icon></a>
+
+                        </div>
                     </div>
-                </footer>
+                    <p class="copyright">Copyright @2024 | Designed With by <u> Decor Deck </u></p>
                 </div>
+            </footer>
+        </div>
 
 
 
 
 
 
-    <!----------------------------------------------- script setion ----------------------------------------------------------------------->
-        
-      
+        <!----------------------------------------------- script setion ----------------------------------------------------------------------->
+        <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+        <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
         <script src="./js/swiper-bundle.min.js"></script>
         <script src="./js/script.js"></script>
         <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+        <script src="https://kit.fontawesome.com/c8e4d183c2.js" crossorigin="anonymous"></script>
         <script>
-              var typed = new Typed(".color1", {
-                  strings: ["Home", "Office", "Restaurant", "BackYard","Doorstep"],
-                  typeSpeed: 30,
-                  backSpeed: 30,
-                  showCursor: true,
-                  loop: true
-              })
+            var typed = new Typed(".color1", {
+                strings: ["Home", "Office", "Restaurant", "BackYard", "Doorstep"],
+                typeSpeed: 30,
+                backSpeed: 30,
+                showCursor: true,
+                loop: true
+            })
+        </script>
+        <script>
+            var swiper = new Swiper(".mySwiper", {
+                slidesPerView: "auto",
+                breakpoints: {
+
+                    390: {
+                        slidesPerView: 1,
+                    },
+                    768:{
+                        slidesPerView: 1,
+                    },
+                    1024: {
+                        slidesPerGroup:3,
+                        slidesPerView: 2.5,
+                    },
+                },
+                mousewheel: {
+                    forceToAxis: true,
+                },
+                
+                spaceBetween: 40,
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
+            });
+         
         </script>
 </body>
 
