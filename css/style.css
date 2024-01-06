@@ -551,11 +551,10 @@ header{
   }
 }
 @media (max-width: 881px) {
-  .home-text h1 {
+  .home_text h1 {
     font-size: 2rem;
   }
-  .shop-container,
-  .new-container {
+  .shop-container {
     grid-template-columns: repeat(auto-fit, minmax(218px, auto));
   }
 }
@@ -590,10 +589,7 @@ header{
     color: #fff;
     background: var(--main-color);
   }
-  .about{
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
+  
   .box-img{
     padding: 1rem;
     order: 2;
@@ -608,20 +604,8 @@ header{
 }
 
 @media (max-width: 491px){
-    .home-text h1{
-        font-size: 1.9rem;
-    }
-    .shop-container,
-    .new-container {
+    .shop-container {
       grid-template-columns: repeat(auto-fit, minmax(200px, auto));
     }
-    .box .box-img{
-        height: 300px;
-    }
-    .news-box input{
-        width: 180px;
-    }
-    .about-text h2{
-        font-size: 1.2rem;
-    }
+   
 }
