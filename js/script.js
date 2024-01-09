@@ -8,3 +8,9 @@ menu.onclick = () => {
 window.onscroll = () => {
     navbar.classList.remove('active');
 }
+function change1(){
+    document.getElementById('cred').style.display = 'block';
+}
+function change2(){
+    document.getElementById('cred').style.display = 'none';
+}
