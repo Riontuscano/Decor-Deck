@@ -781,6 +781,9 @@ header {
   .news-rev {
     padding: 0 150px 20px;
   }
+  .addtocart{
+    width: 40%;
+  }
 }
 
 @media (max-width: 881px) {
