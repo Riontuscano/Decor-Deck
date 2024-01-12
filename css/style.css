@@ -221,12 +221,25 @@ header {
   top:0;
   right:-100%;
   width:400px;
+  max-height: 100vh;
   min-height: 100vh;
   padding: 20px;
   background-color: #fff;
-  /* opacity: 0.9; */
+  overflow: hidden;
+  overflow-y: auto !important;
+  opacity: 0.95;
   box-shadow: -2px 0 4px hsl(0 4% 15% / 10%);
   transition: 0.5s;
+  /* ::-webkit-scrollbar{ 
+    width: 15px !important;
+  }
+    ::-webkit-scrollbar-track{
+    background:#edecea  !important;
+  }
+  ::-webkit-scrollbar-thumb{
+    background: #fff  !important;  
+    border-radius: 10px  !important;
+  } */
 }
 .addtocart.active{
   right: 0;
@@ -388,7 +401,7 @@ header {
 .box span {
   font-size: 1.1rem;
   font-weight: 500;
-  padding-left: 12px;
+  /* padding-left: 12px; */
   color: var(--main-color);
 }
 
@@ -396,19 +409,23 @@ header {
   color: gold !important;
 }
 
-.box .bx-cart {
+.box .bx-cart1 {
   position: absolute;
+  width: 10%;
+  height: 7%;
   bottom: 0;
   right: 0;
   padding: 7px;
-  font-size: 0px;
+  font-size: 15px;
   color: #fff;
   border-radius: 4px 0 4px 0;
   background: var(--main-color);
   cursor: pointer;
 }
-
-.box .bx-cart:hover {
+.box .bx-cart1 .bx-cart{
+  font-size: 20px;
+}
+.box .bx-cart1:hover {
   background: #8fc53d;
 }
 
@@ -967,4 +984,22 @@ header {
 ::selection {
   color: #ffffff;
   background-color: #252525;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar{ 
+
+  width: 15px;
+}
+  ::-webkit-scrollbar-track{
+
+  background:#edecea;
+  
+}
+  
+::-webkit-scrollbar-thumb{
+  
+  background: #83b735;
+  
+  border-radius: 10px;
 }
