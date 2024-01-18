@@ -1,19 +1,18 @@
-const express = require("express");
-const { join } = require("path");
+import express from 'express';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+
 const app = express();
 
-// Serve static assets from the /public folder
-app.use(express.static(join(__dirname, "public")));
+app.use(express.static('public'));
+app.use(express.json());
 
-// Endpoint to serve the configuration file
-app.get("/auth_config.json", (req, res) => {
-  res.sendFile(join(__dirname, "auth_config.json"));
+app.get('/', (req, res) => {
+        res.sendFile('index.html',{root:'public'});
 });
 
-// Serve the index page for all other requests
-app.get("/*", (_, res) => {
-  res.sendFile(join(__dirname, "index.html"));
+app.listen(3000, () => {
+    console.log("listening on port 3000...");
 });
-
-// Listen on port 3000
-app.listen(3000, () => console.log("Application running on port 3000"));

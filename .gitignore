@@ -1,2 +1,3 @@
-/garbage.txt
-/demo.html
+**/node_modules
+**/garbage.txt
+**/demo.html
