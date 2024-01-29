@@ -170,7 +170,7 @@ cartShopBox
 //buy btn def
 
 function buybtnClicked(){
-  alert("Your order has been placed!!")
+  // alert("Your order has been placed!!")
   var cartContent = document.getElementsByClassName("cart-content")[0];
   while (cartContent.hasChildNodes()) {
     cartContent.removeChild(cartContent.firstChild);
@@ -222,12 +222,12 @@ function saveCartItems(){
     var cartbox = cartBoxes[i];
     var cartItemTitle = cartbox.getElementsByClassName("cart-product-title")[0];
     var priceElement = cartbox.getElementsByClassName("cart-price")[0];
-    var qauntityElement = cartbox.getElementsByClassName("cart-quantity")[0];
+    var quantityElement = cartbox.getElementsByClassName("cart-quantity")[0];
     var img = cartbox.getElementsByClassName("cart-img")[0];
     var item = {
       title :  cartItemTitle.innerText,
       price :  priceElement.innerText,
-      qauntity: qauntityElement.value,
+      quantity: quantityElement.value,
       productimg:img.src,
     };
     cartItems.push(item);

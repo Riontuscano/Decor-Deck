@@ -1,3 +1,4 @@
 **/node_modules
 **/garbage.txt
 **/demo.html
+.env
