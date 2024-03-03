@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Decor-Deck :- An Online Furniture App | Augmented Furniture Model | Cool Furniture Designs | Easy Return
-           policy | Convenient Payment Option </title>
+        policy | Convenient Payment Option </title>
     <meta name="title" content="Decor-Deck">
     <meta name="description" content=" An Online Furniture App with implementation of Augmented reality">
     <link rel="stylesheet" href="./css/style.css">
@@ -15,16 +15,17 @@
     <link rel="stylesheet" href="./css/swiper-bundle.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-      
-    </head>
+
+</head>
+
 <body class="prevent-select">
     <header>
-      
+
         <p href="#" class="logo"><img src="./img/Final-logo.png" alt="logo" width="40px">Decor<span>Deck</span></p>
-       
+
         <ul class="navbar">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#shop">Shop</a></li>
+            <li><a href="#home" style="color: #83b735;">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
             <!-- <li><a href="#new">New Launch</a></li> -->
             <li><a href="#about">About</a></li>
             <li><a href="#blog">Blog</a></li>
@@ -35,35 +36,62 @@
             <!-- <li><a href="#"><ion-icon name="cart" class="nav-cart" id="nav-cart"></ion-icon></a></li> -->
             <li><a href="#"><i class='bx bxs-shopping-bag-alt' id="nav-cart" data-quantity="0"></i></a></li>
             <div class="bx bx-menu" id="menu-icon"></div>
-            <a href="#"><ion-icon name="person-circle-outline" class="nav-profile"></ion-icon></a>
-            <div class="subwrap">
+            <img src="./img/default-profile.png" alt="profile" class="nav-profile-login" id="main-profile-img"
+                onclick="toggleprofile()">
+            <div class="sub-wrap" id="subwrap">
                 <div class="submenu">
                     <div class="info-user">
-                        <!-- <button id="btn-login" disabled="true" onclick="login()">Log in</button>
-                        <button id="btn-logout" disabled="true" onclick="logout()">Log out</button> -->
+                        <img src="" alt="" id="profile-img">
+                        <h4 id="profile-name"></h4>
                     </div>
+                    <hr>
+                    <a href="#" class="sub-menu-link" id="profile-editprofile">
+                        <i class='bx bxs-cog'></i>
+                        <p>Edit-profile</p>
+                        <span>></span>
+                    </a>
+                    <a href="https://mail.google.com/mail/u/0/#inbox?compose=CllgCJqTfglMlTbWdhkfQjBbrSxJVcGQtvKmQgrzGZSZWLsLLQxstpsMfXtrhSfHHwhpmGdMsmg-"
+                        class="sub-menu-link">
+                        <i class='bx bx-support'></i>
+                        <p>Help-Support</p>
+                        <span>></span>
+                    </a>
+                    <a href="#" class="sub-menu-link" id="profile-logout" onclick="profilelogout()">
+                        <i class='bx bx-log-out'></i>
+                        <p>Log-out</p>
+                        <span>></span>
+                    </a>
+                    <a href="#" class="sub-menu-link" id="profile-login" onclick="profilelogin()">
+                        <i class='bx bx-log-in'></i>
+                        <p>Sign-up</p>
+                        <span>></span>
+                    </a>
                 </div>
             </div>
-         
-            </ul>
-             <!-- Cart -->
-             <div class="cart">
-                <h2 class="cart-title">Your Cart</h2>
-             <div class="cart-content">
-             </div>
-             <div class="cart-total">
+
+        </ul>
+        <!-- Cart -->
+        <div class="cart">
+            <h2 class="cart-title">Your Cart</h2>
+            <div class="cart-content">
+            </div>
+            <div class="cart-total">
                 <div class="cart-total-title">Total </div>
-                    <div class="totalprice"> Rs.0</div>
-                </div>
-                <button type="button" class="cart-btn" id="cartbtn">Buy Now</button>
-                <ion-icon name="arrow-forward-circle" id="close-cart"></ion-icon>
-            
+                <div class="totalprice"> Rs.0</div>
             </div>
-            
+            <div id="note">     
+                <br><br>           
+                <b>Note:-</b>Please Login before Checkout
+            </div>
+            <button type="button" class="cart-btn" id="cartbtn">Buy Now</button>
+            <ion-icon name="arrow-forward-circle" id="close-cart"></ion-icon>
+
+        </div>
+
     </header>
-   
+
     <section class="home" id="home">
-       
+
         <div class="home_txt">
             <!-- <h1>Decor-Deck</h1> -->
             <h1><span class="color">Your</span> Comfort <br><span class="auto-type2"> At Your <span
@@ -74,7 +102,7 @@
                 With Augmented feature try what you like wherever you like !!
             </p>
             <!-- <h1>Get <span class="auto-type"></span></h1><br> -->
-            <a href="pay_success.html" class="btn2">Check Out</a>
+            <a href="shop.html" class="btn2">Check Out</a>
         </div>
     </section>
 
@@ -83,19 +111,15 @@
             <h5>New Launch</h5>
             <h2>Shop Now</h2>
         </div>
-        <div class="division">
+        <!-- <div class="division">
             <ul class="items">
                 <li onclick="change(1)"><a href="#chair">Chair</a></li>
                 <li onclick="change(2)"><a href="#sofa">Sofa</a></li>
                 <li onclick="change(3)"><a href="#Table">Table</a></li>
-                <li onclick="change(4)"><a href="#Bed">bed</a></li>
             </ul>
-        </div><br><br>
-        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
-            <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
-          </svg> -->
+        </div><br><br> -->
         <div class="shop-container">
-            
+
             <div class="box">
                 <div class="box-img">
                     <img src="./img/chair5.jpg" alt="chair_img" class="product-img">
@@ -114,7 +138,7 @@
                 <i class='bx bx-rupee' style="color: green;"></i>
                 <span class="product-price">5999</span>
                 <div class="bx-cart1">
-                    <i class='bx bx-cart' id="Pink Lawn Chair" ></i>
+                    <i class='bx bx-cart' id="Pink Lawn Chair"></i>
                 </div>
             </div>
             <div class="box">
@@ -134,7 +158,7 @@
                 <i class='bx bx-rupee' style="color: green;"></i>
                 <span class="product-price">3499</span>
                 <div class="bx-cart1">
-                    <i class='bx bx-cart' id="Grey Chair" ></i>
+                    <i class='bx bx-cart' id="Grey Chair"></i>
                 </div>
             </div>
             <div class="box">
@@ -155,7 +179,7 @@
                 <i class='bx bx-rupee' style="color: green;"></i>
                 <span class="product-price">19999</span>
                 <div class="bx-cart1">
-                    <i class='bx bx-cart' id="Massage Chair" ></i>
+                    <i class='bx bx-cart' id="Massage Chair"></i>
                 </div>
             </div>
             <div class="box">
@@ -164,7 +188,7 @@
                 </div>
                 <div class="title-price">
                     <h3 class="product-title">Sofa Chair</h3>
-                    
+
                     <div class="stars">
                         <ion-icon name="star" class="bx"></ion-icon>
                         <ion-icon name="star" class="bx"></ion-icon>
@@ -178,7 +202,7 @@
                 <i class='bx bx-rupee' style="color: green;"></i>
                 <span class="product-price">14999</span>
                 <div class="bx-cart1">
-                    <i class='bx bx-cart' id="Sofa Chair" ></i>
+                    <i class='bx bx-cart' id="Sofa Chair"></i>
                 </div>
             </div>
             <div class="box">
@@ -198,7 +222,7 @@
                 <i class='bx bx-rupee' style="color: green;"></i>
                 <span class="product-price">6999</span>
                 <div class="bx-cart1">
-                    <i class='bx bx-cart' id="Orange Cushion Chair" ></i>
+                    <i class='bx bx-cart' id="Orange Cushion Chair"></i>
                 </div>
             </div>
             <div class="box">
@@ -218,7 +242,7 @@
                 <i class='bx bx-rupee' style="color: green;"></i>
                 <span class="product-price">12999</span>
                 <div class="bx-cart1">
-                    <i class='bx bx-cart' id="Gaming Chair" ></i>
+                    <i class='bx bx-cart' id="Gaming Chair"></i>
                 </div>
             </div>
         </div>
@@ -233,7 +257,7 @@
 
             <div class="banner-text">
                 <h2>Explore <span id="col">More</span></h2>
-                <a class="tryaug" href="https://playcanv.as/p/u6w9btJd/">Try Now</a>
+                <a class="tryaug" href="augmentation_beta.html">Try Now</a>
 
             </div>
         </div>
@@ -480,49 +504,47 @@
             </div>
         </div>
         <br><br>
-        <section class="getconnected" >
+        <section class="getconnected">
             <div class="heading">
                 <h5>Newsletter</h5>
                 <h3>Get Connected</h3>
             </div>
         </section>
-        <section class = "newsletter py bg-light-grey-color-shade" id = "newsletter">
-            <div class = "container">
-                <div class = "section-title text-center">
-                    <p class = "lead">
-                       Your feedback is valuable to us. Please don't hesitate to share your experience, whether it's <br> positive or negative.
+        <section class="newsletter py bg-light-grey-color-shade" id="newsletter">
+            <div class="container">
+                <div class="section-title text-center">
+                    <p class="lead">
+                        Your feedback is valuable to us. Please don't hesitate to share your experience, whether it's
+                        <br> positive or negative.
                     </p>
                 </div>
-                <div class = "newsletter-content">
-                    <div class="rating-star">       
+                <div class="newsletter-content">
+                    <div class="rating-star">
                         <h3 id="output">
                             Rating : <br> 0/5
-                        </h3> 
-                            <span onclick="rating(1)"
-                            class="star">★
+                        </h3>
+                        <span onclick="rating(1)" class="star">★
                         </span>
-                        <span onclick="rating(2)"
-                              class="star">★
+                        <span onclick="rating(2)" class="star">★
                         </span>
-                        <span onclick="rating(3)"
-                        class="star">★
-                    </span>
-                    <span onclick="rating(4)"
-                    class="star">★
-                </span>
-                <span onclick="rating(5)"
-                class="star">★
-            </span>
-          
-    </div> <br>
+                        <span onclick="rating(3)" class="star">★
+                        </span>
+                        <span onclick="rating(4)" class="star">★
+                        </span>
+                        <span onclick="rating(5)" class="star">★
+                        </span>
+
+                    </div> <br>
                     <div class="news-rev">
-                        <textarea name="newsletter-rev" class="newsletter-rev" cols="30" rows="10" placeholder="Write a Review......" resize="none"></textarea>
+                        <textarea name="newsletter-rev" class="newsletter-rev" cols="30" rows="10"
+                            placeholder="Write a Review......" resize="none"></textarea>
                     </div>
-                    <textarea name="newsletter-rev" class="newsletter-rev1" id="onlyphone" cols="30" rows="10" placeholder="Write a Review...." resize="none"></textarea>
+                    <textarea name="newsletter-rev" class="newsletter-rev1" id="onlyphone" cols="30" rows="10"
+                        placeholder="Write a Review...." resize="none"></textarea>
                     <form>
-                        <div class = "input-group flex" id="cus-rev">
-                            <input type = "email" class = "form-control bg-light-grey" placeholder="Enter Email..........">
-                            <button type = "submit" class = "btn bg-dark text-white text-uppercase">subscribe</button>
+                        <div class="input-group flex" id="cus-rev">
+                            <input type="email" class="form-control bg-light-grey" placeholder="Enter Email..........">
+                            <button type="submit" class="btn bg-dark text-white text-uppercase">subscribe</button>
                         </div>
                     </form>
                 </div>
@@ -573,12 +595,15 @@
 
         <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
         <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
         <script src="./js/swiper-bundle.min.js"></script>
         <script src="./js/script.js"></script>
         <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
@@ -586,6 +611,7 @@
         <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
         <script src="https://js.stripe.com/v3/"></script>
         <script src="./js/cart.js"></script>
+        <script src="./js/profilelogin.js"></script>
 
         <script>
             var typed = new Typed(".color1", {
@@ -604,26 +630,27 @@
                     390: {
                         slidesPerView: 1,
                     },
-                    768:{
+                    768: {
                         slidesPerView: 1,
                     },
                     1024: {
-                        slidesPerGroup:3,
+                        slidesPerGroup: 3,
                         slidesPerView: 2.5,
                     },
                 },
                 mousewheel: {
                     forceToAxis: true,
                 },
-                
+
                 spaceBetween: 40,
                 pagination: {
                     el: ".swiper-pagination",
                     clickable: true,
                 },
             });
-         
+
         </script>
+
 </body>
 
 </html>

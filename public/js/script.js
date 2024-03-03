@@ -10,6 +10,10 @@ menu.onclick = () => {
 window.onscroll = () => {
   navbar.classList.remove("active");
 };
+let submenu = document.getElementById("subwrap");
+function toggleprofile(){
+    submenu.classList.toggle("open-menu");
+}
 function change1() {
   document.getElementById("cred").style.display = "block";
 }
@@ -92,6 +96,7 @@ function removeCartItem(event) {
   buttonClicked.parentElement.remove();
   updateTotal();
   saveCartItems();
+  updateCartIcon();
 }
 //Quantity changes
 function quantityChanged(event) {
@@ -122,15 +127,30 @@ cartIcons.forEach((cartIcon) => {
 
     const img = productimg[0].src;
 
-    // console.log("Product title:", productTitle.textContent);
-    // console.log("Product price:", productprice.textContent);
-    // console.log("Product img:", productimg[0].src);
+    
     addProductToCart(Title, price1, img);
     updateTotal();
     updateCartIcon();
     saveCartItems();
   });
 });
+
+function addproduct(val){
+    const boxElement = document.getElementById(val).closest(".preview");
+
+    const Title = boxElement.querySelector(".product-title").textContent;
+
+    const price1 = boxElement.querySelector(".product-price").textContent;
+
+    const productparent = boxElement.querySelector(".preview-img");
+
+    const img = productparent.src;
+
+   addProductToCart(Title, price1, img);
+    updateTotal();
+    updateCartIcon();
+    saveCartItems();
+}
 
 function addProductToCart(Title, price, img) {
   var cartShopBox = document.createElement("div");
@@ -175,7 +195,7 @@ function buybtnClicked(){
   while (cartContent.hasChildNodes()) {
     cartContent.removeChild(cartContent.firstChild);
 }
-localStorage.clear();
+// localStorage.clear();
 updateTotal();
 updateCartIcon();
 // saveCartItems();
@@ -228,7 +248,7 @@ function saveCartItems(){
       title :  cartItemTitle.innerText,
       price :  priceElement.innerText,
       quantity: quantityElement.value,
-      productimg:img.src,
+      productImg:img.src,
     };
     cartItems.push(item);
   }
@@ -244,13 +264,13 @@ function loadCartItems() {
     for(var i=0; i < cartItems.length; i++){
       var items = cartItems[i];
       // console.log(items.title, items.price,items.productimg);
-      addProductToCart(items.title, items.price, items.productimg);
+      addProductToCart(items.title, items.price, items.productImg);
 
-      // var cartBoxes =document.getElementsByClassName('cart-box');
-      // var cartbox = cartBoxes[cartBoxes.length-1];
-      // var qauntityElement = cartbox.getElementsByClassName('cart-quantity')[0];
-      // qauntityElement.value = items.quantity;
-      // updateCartIcon();
+      var cartBoxes =document.getElementsByClassName('cart-box');
+      var cartbox = cartBoxes[cartBoxes.length-1];
+      var qauntityElement = cartbox.getElementsByClassName('cart-quantity')[0];
+      qauntityElement.value = items.quantity;
+      updateCartIcon();
     }
   }
   var cartTotal = localStorage.getItem('cartTotal');
@@ -276,3 +296,114 @@ function updateCartIcon(){
   var cartIcon = document.querySelector('#nav-cart');
   cartIcon.setAttribute('data-quantity', quantity);
 }
+
+
+function clearcart() {
+  var cartContent = document.getElementsByClassName("cart-content")[0];
+  cartContent.innerHTML = '';
+  updateTotal();
+  localStorage.removeItem('cartItems');
+  
+}
+
+
+
+// shop section
+// Sample data for products
+
+const product=[
+ chairs = [
+  { name: 'Pink Lawn Chair', imgSrc: './img/chair5.jpg', price: 5999, rating: 5 },
+  { name: 'Grey Chair', imgSrc: './img/chair2.jpg', price: 3499, rating: 4.5 },
+  { name: 'Massage Chair', imgSrc: './img/chair3.jpg', price: 19999, rating: 5 },
+  { name: 'Sofa Chair', imgSrc: './img/chair4.webp', price: 14999, rating: 4 },
+  { name: 'Orange Cushion Chair', imgSrc: './img/chair1.jpg', price: 6999, rating: 4.5 },
+  { name: 'Gaming Chair', imgSrc: './img/chair6.webp', price: 12999, rating: 4.5 },
+],
+ sofa =[
+  { name: "Cozy Blissful Sofa", imgSrc: "./img/sofa1.png", price: 17999, rating: 4.5 },
+  { name: "Velvet Dream Sofa", imgSrc: "./img/sofa2.png", price: 25499, rating: 4 },
+  { name: "Luxury Comfort Sofa", imgSrc: "./img/sofa3.png", price: 26999, rating: 5 },
+  { name: "Elegant Harmony Sofa", imgSrc: "./img/sofa4.png", price: 28999, rating: 4 },
+  { name: "Soothing Serenity Sofa", imgSrc: "./img/sofa5.png", price: 19999, rating: 4.5 },
+  { name: "Modern Zenith Sofa", imgSrc: "./img/sofa6.png", price: 21999, rating: 5 }
+],
+ table = [
+  { name: "Elegant Oak Table", imgSrc: "./img/table1.png", price: 3499, rating: 5 },
+  { name: "Rustic Pine Table", imgSrc: "./img/table2.png", price: 2299, rating:  4.5},
+  { name: "Contemporary Glass Table", imgSrc: "./img/table3.png", price: 5799, rating: 5 },
+  { name: "Vintage Mahogany Table", imgSrc: "./img/table4.png", price: 4599, rating: 4.5 },
+  { name: "Modern Marble Table", imgSrc: "./img/table5.png", price: 6899, rating: 4 },
+  { name: "Industrial Metal Table", imgSrc: "./img/table6.png", price: 7999, rating: 4 }
+]
+]
+// console.log(product[0])
+
+// Function to create HTML for a product
+function createProductHTML(product) {
+  return `
+    <div class="box">
+      <div class="box-img">
+        <img src="${product.imgSrc}" alt="${product.name}" class="product-img">
+      </div>
+      <div class="title-price">
+        <h3 class="product-title">${product.name}</h3>
+        <div class="stars">
+          ${getRatingStars(product.rating)}
+        </div>
+      </div>
+      <i class='bx bx-rupee' style="color: green;"></i>
+      <span class="product-price">${product.price}</span>
+      <div class="bx-cart1">
+        <i class='bx bx-cart' id="${product.name}"></i>
+      </div>
+    </div>
+  `;
+}
+
+// Function to get star icons based on rating
+function getRatingStars(rating) {
+  const fullStars = Math.floor(rating);
+  const halfStar = rating % 1 !== 0 ? 1 : 0;
+  
+  const starIcons = Array.from({ length: fullStars + halfStar }, (_, index) => {
+    const isHalf = index === fullStars && halfStar === 1;
+    return `<ion-icon name="${isHalf ? 'star-half' : 'star'}" class="bx"></ion-icon>`;
+  });
+
+  return starIcons.join('');
+}
+function change(num){
+  if(num==1){
+    const shopContainer =  document.getElementsByClassName("shop-container");
+  var products = product[0]
+  products.forEach((product) => {
+    const productHTML = createProductHTML(product);
+    // console.log(productHTML);
+    shopContainer.innerHTML += productHTML;
+  });
+  }
+  if(num==2){
+    const shopContainer =  document.getElementsByClassName("shop-container");
+    var products = product[1]
+    products.forEach((product) => {
+      const productHTML = createProductHTML(product);
+      // console.log(productHTML);
+      shopContainer.innerHTML += productHTML;
+    });
+  }
+  if(num==3){
+    const shopContainer =  document.getElementsByClassName("shop-container");
+    var products = product[2]
+    products.forEach((product) => {
+      const productHTML = createProductHTML(product);
+      // console.log(productHTML);
+      shopContainer.innerHTML += productHTML;
+    });
+  }
+}
+
+
+
+// // Call the function to add products when the page loads
+// window.onload = addProductsToShopContainer;

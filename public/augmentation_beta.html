@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decor-Deck - Shop </title>
+    <meta name="title" content="Decor-Deck">
+    <meta name="description" content=" An Online Furniture App with implementation of Augmented reality">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="shortcut icon" href="./img/favicon.ico" sizes="32x32" type="image/x-icon">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="./css/swiper-bundle.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        .banner-img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .bxs-camera {
+            font-size: 22px;
+        }
+
+        .divider {
+            display: flex;
+
+            &:before,
+            &:after {
+                content: "";
+                flex: 1;
+            }
+        }
+
+
+        .line {
+            align-items: center;
+            margin: 1em -1em;
+
+            &:before,
+            &:after {
+                height: 1px;
+                margin: 0 1em;
+            }
+        }
+
+        .gradient {
+            align-items: stretch;
+            margin: 1em 0;
+            height: 2em;
+            line-height: 2em;
+            color: white;
+            background: black;
+
+            &:before {
+                background: linear-gradient(to right, white, black);
+            }
+
+            &:after {
+                background: linear-gradient(to left, white, black);
+            }
+        }
+    </style>
+</head>
+
+<body class="prevent-select">
+    <header>
+
+        <p href="#" class="logo"><img src="./img/Final-logo.png" alt="logo" width="40px">Decor<span>Deck</span></p>
+
+        <ul class="navbar">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+
+            <li><a href="#about">About</a></li>
+            <li><a href="#blog">Blog</a></li>
+            <li><a href="#aug" style="color: #83b735;">Try Augmented</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <ul class="auth">
+            <!-- <li><a href="#"><ion-icon name="cart" class="nav-cart" id="nav-cart"></ion-icon></a></li> -->
+            <li><a href="#"><i class='bx bxs-shopping-bag-alt' id="nav-cart" data-quantity="0"></i></a></li>
+            <div class="bx bx-menu" id="menu-icon"></div>
+            <img src="./img/default-profile.png" alt="profile" class="nav-profile-login" id="main-profile-img"
+                onclick="toggleprofile()">
+            <div class="sub-wrap" id="subwrap">
+                <div class="submenu">
+                    <div class="info-user">
+                        <img src="" alt="" id="profile-img">
+                        <h4 id="profile-name"></h4>
+                    </div>
+                    <hr>
+                    <a href="#" class="sub-menu-link" id="profile-editprofile">
+                        <i class='bx bxs-cog'></i>
+                        <p>Edit-profile</p>
+                        <span>></span>
+                    </a>
+                    <a href="#" class="sub-menu-link">
+                        <i class='bx bx-support'></i>
+                        <p>Help-Support</p>
+                        <span>></span>
+                    </a>
+                    <a href="#" class="sub-menu-link" id="profile-logout" onclick="profilelogout()">
+                        <i class='bx bx-log-out'></i>
+                        <p>Log-out</p>
+                        <span>></span>
+                    </a>
+                    <a href="#" class="sub-menu-link" id="profile-login" onclick="profilelogin()">
+                        <i class='bx bx-log-in'></i>
+                        <p>Sign-up</p>
+                        <span>></span>
+                    </a>
+                </div>
+            </div>
+
+        </ul>
+        <!-- Cart -->
+        <div class="cart">
+            <h2 class="cart-title">Your Cart</h2>
+            <div class="cart-content">
+            </div>
+            <div class="cart-total">
+                <div class="cart-total-title">Total </div>
+                <div class="totalprice"> Rs.0</div>
+            </div>
+            <button type="button" class="cart-btn" id="cartbtn">Buy Now</button>
+            <ion-icon name="arrow-forward-circle" id="close-cart"></ion-icon>
+
+        </div>
+
+    </header>
+    <!-- <img src="./img/aug3.webp" alt="" class="banner-img"> -->
+    <section class="shop mt-5" id="new">
+        <div class="heading">
+            <h2 class="divider gradient" contenteditable>
+            Augmented Reality
+        </h2>
+            <h3>Explore Now</h3>
+         
+            <p style="margin-bottom: 0rem;">Our Brand new BETA feature to implement Augmented in our surrounding with a
+                click of a button..........</p>
+            <p>Go try and give our honest reviews as its most valuable to us</p>
+        </div><br>
+
+
+
+        <div class="shop-container">
+
+            <div class="box">
+                <div class="box-img">
+                    <img src="./img/chair5.jpg" alt="chair_img" class="product-img">
+                </div>
+                <div class="title-price">
+                    <h3 class="product-title">Pink Lawn Chair</h3>
+                    <div class="stars">
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <!-- <ion-icon name="star-half" class="bx"></ion-icon> -->
+                    </div>
+                </div>
+                <i class='bx bx-rupee' style="color: green;"></i>
+                <span class="product-price">5999</span>
+                <div class="bx-cart1">
+                    <i class='bx bxs-camera'></i>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-img">
+                    <img src="./img/chair2.jpg" alt="chair_img">
+                </div>
+                <div class="title-price">
+                    <h3 class="product-title">Grey Chair</h3>
+                    <div class="stars">
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star-half" class="bx"></ion-icon>
+                    </div>
+                </div>
+                <i class='bx bx-rupee' style="color: green;"></i>
+                <span class="product-price">3499</span>
+                <div class="bx-cart1">
+                    <i class='bx bxs-camera'></i>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-img">
+                    <img src="./img/chair3.jpg" alt="chair_img">
+                </div>
+                <div class="title-price">
+                    <h3 class="product-title">Massage Chair</h3>
+                    <div class="stars">
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <!-- <ion-icon name="star-half" class="bx"></ion-icon> -->
+                    </div>
+                </div>
+                <i class='bx bx-rupee' style="color: green;"></i>
+                <span class="product-price">19999</span>
+                <div class="bx-cart1">
+                    <i class='bx bxs-camera'></i>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-img">
+                    <img src="./img/chair4.webp" alt="chair_img">
+                </div>
+                <div class="title-price">
+                    <h3 class="product-title">Sofa Chair</h3>
+
+                    <div class="stars">
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <!-- <ion-icon name="star-half" class="bx"></ion-icon> -->
+                    </div>
+                    <!-- <i class='bx bx-cart'></i> -->
+                </div>
+                <i class='bx bx-rupee' style="color: green;"></i>
+                <span class="product-price">14999</span>
+                <div class="bx-cart1">
+                    <i class='bx bxs-camera'></i>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-img">
+                    <img src="./img/chair1.jpg" alt="chair_img">
+                </div>
+                <div class="title-price">
+                    <h3 class="product-title">Orange Cushion Chair</h3>
+                    <div class="stars">
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star-half" class="bx"></ion-icon>
+                    </div>
+                </div>
+                <i class='bx bx-rupee' style="color: green;"></i>
+                <span class="product-price">6999</span>
+                <div class="bx-cart1">
+                    <i class='bx bxs-camera'></i>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-img">
+                    <img src="./img/chair6.webp" alt="chair_img">
+                </div>
+                <div class="title-price">
+                    <h3 class="product-title">Gaming Chair</h3>
+                    <div class="stars">
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star-half" class="bx"></ion-icon>
+                    </div>
+                </div>
+                <i class='bx bx-rupee' style="color: green;"></i>
+                <span class="product-price">12999</span>
+                <div class="bx-cart1">
+                    <i class='bx bxs-camera'></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="shop-container">
+
+            <div class="box">
+                <div class="box-img">
+                    <img src="./img/chair5.jpg" alt="chair_img" class="product-img">
+                </div>
+                <div class="title-price">
+                    <h3 class="product-title">Pink Lawn Chair</h3>
+                    <div class="stars">
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+
+                    </div>
+                </div>
+                <i class='bx bx-rupee' style="color: green;"></i>
+                <span class="product-price">5999</span>
+                <div class="bx-cart1">
+                    <i class='bx bxs-camera'></i>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-img">
+                    <img src="./img/chair2.jpg" alt="chair_img">
+                </div>
+                <div class="title-price">
+                    <h3 class="product-title">Grey Chair</h3>
+                    <div class="stars">
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star-half" class="bx"></ion-icon>
+                    </div>
+                </div>
+                <i class='bx bx-rupee' style="color: green;"></i>
+                <span class="product-price">3499</span>
+                <div class="bx-cart1">
+                    <i class='bx bxs-camera'></i>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-img">
+                    <img src="./img/chair3.jpg" alt="chair_img">
+                </div>
+                <div class="title-price">
+                    <h3 class="product-title">Massage Chair</h3>
+                    <div class="stars">
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <!-- <ion-icon name="star-half" class="bx"></ion-icon> -->
+                    </div>
+                </div>
+                <i class='bx bx-rupee' style="color: green;"></i>
+                <span class="product-price">19999</span>
+                <div class="bx-cart1">
+                    <i class='bx bxs-camera'></i>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-img">
+                    <img src="./img/chair4.webp" alt="chair_img">
+                </div>
+                <div class="title-price">
+                    <h3 class="product-title">Sofa Chair</h3>
+
+                    <div class="stars">
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <!-- <ion-icon name="star-half" class="bx"></ion-icon> -->
+                    </div>
+                    <!-- <i class='bx bx-cart'></i> -->
+                </div>
+                <i class='bx bx-rupee' style="color: green;"></i>
+                <span class="product-price">14999</span>
+                <div class="bx-cart1">
+                    <i class='bx bxs-camera'></i>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-img">
+                    <img src="./img/chair1.jpg" alt="chair_img">
+                </div>
+                <div class="title-price">
+                    <h3 class="product-title">Orange Cushion Chair</h3>
+                    <div class="stars">
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star-half" class="bx"></ion-icon>
+                    </div>
+                </div>
+                <i class='bx bx-rupee' style="color: green;"></i>
+                <span class="product-price">6999</span>
+                <div class="bx-cart1">
+                    <i class='bx bxs-camera'></i>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-img">
+                    <img src="./img/chair6.webp" alt="chair_img">
+                </div>
+                <div class="title-price">
+                    <h3 class="product-title">Gaming Chair</h3>
+                    <div class="stars">
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star" class="bx"></ion-icon>
+                        <ion-icon name="star-half" class="bx"></ion-icon>
+                    </div>
+                </div>
+                <i class='bx bx-rupee' style="color: green;"></i>
+                <span class="product-price">12999</span>
+                <div class="bx-cart1">
+                    <i class='bx bxs-camera'></i>
+                </div>
+            </div>
+        </div>
+
+
+
+    </section>
+    <div class="footer-dark">
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-md-3 item">
+                        <h3>Services</h3>
+                        <ul>
+                            <li><a href="#">Home Decor</a></li>
+                            <li><a href="#">Furniture</a></li>
+                            <li><a href="#">Home/Room Customization</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-md-3 item">
+                        <h3>About</h3>
+                        <ul>
+                            <li><a href="#">Company</a></li>
+                            <li><a href="#">Team</a></li>
+                            <li><a href="#">Careers</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6 item text">
+                        <h3>Decor Deck</h3>
+                        <p>Praesent sed lobortis mi. Suspendisse vel placerat ligula. Vivamus ac sem lacus. Ut
+                            vehicula rhoncus elementum. Etiam quis tristique lectus. Aliquam in arcu eget velit
+                            pulvinar dictum vel in justo.</p>
+                    </div>
+                    <div class="col item social" id="contact">
+                        <a href="#" class="facebook"><ion-icon name="logo-facebook"></ion-icon></a>
+                        <a href="#" class="twitter"><ion-icon name="logo-twitter"></ion-icon></a>
+                        <a href="#" class="google"><ion-icon name="logo-google"></ion-icon></a>
+                        <a href="#" class="instagram"><ion-icon name="logo-instagram"></ion-icon></a>
+
+                    </div>
+                </div>
+                <p class="copyright">Copyright @2024 | Designed With by <u> Decor Deck </u></p>
+            </div>
+        </footer>
+    </div>
+
+
+
+    <!-- script section -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/swiper-bundle.min.js"></script>
+    <script src="./js/script.js"></script>
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+    <script src="https://kit.fontawesome.com/c8e4d183c2.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="./js/cart.js"></script>
+    <script src="./js/profilelogin.js"></script>
+</body>
+
+</html>
