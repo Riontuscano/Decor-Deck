@@ -8,7 +8,7 @@ function profilelogin(){
 
   let params ={
     "client_id":"771114475204-olqejspffto4g9kikfqqcmbn3bakqd78.apps.googleusercontent.com",
-    "redirect_uri":"https://decor-deck.onrender.com/",
+    "redirect_uri":"http://localhost:3000",
     "response_type":"token",
     "scope":"https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/youtube.readonly",
     "include_granted_scopes":"true",
