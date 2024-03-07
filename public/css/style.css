@@ -562,10 +562,29 @@ header {
   background: var(--main-color);
   cursor: pointer;
 }
+.bxs-camera::before{
+  color: white !important;
+}
+.box .bx-cartaug {
+  position: absolute;
+  width: 10%;
+  height: 7%;
+  bottom: 0;
+  right: 0;
+  padding: 7px;
+  font-size: 15px;
+  color: #fff;
+  border-radius: 4px 0 4px 0;
+  background: var(--main-color);
+  cursor: pointer;
+}
 .box .bx-cart1 .bx-cart{
   font-size: 20px;
 }
 .box .bx-cart1:hover {
+  background: #8fc53d;
+}
+.box .bx-cartaug:hover {
   background: #8fc53d;
 }
 
@@ -961,7 +980,6 @@ header {
   #menu-icon {
     display: initial;
   }
-
   header .navbar {
     position: absolute;
     /* width: 100%; */
