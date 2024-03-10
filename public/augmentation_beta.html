@@ -63,6 +63,27 @@
                 background: linear-gradient(to left, white, black);
             }
         }
+     
+        .heading-container {
+    text-align: center;
+    padding: 30px 0;
+  }
+  .heading-text {
+    font-size: 44px;
+    color: #82d10c; /* vibrant green text color */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* subtle shadow effect */
+    transition: transform 0.5s ease; /* Smooth transition on hover */
+    /* cursor: pointer; Change cursor to pointer on hover */
+  }
+  .heading-text:hover {
+    transform: scale(1); /* Scale up the text on hover */
+  }
+  @media (max-width: 768px) {
+    .heading-text {
+        font-size: 38px;
+    }
+  }
+    
     </style>
 </head>
 
@@ -134,7 +155,11 @@
     </header>
     <!-- <img src="./img/aug3.webp" alt="" class="banner-img"> -->
     <section class="shop mt-5" id="new">
-        <div class="heading">
+        <div class="heading-container">
+            <h1 class="heading-text"> <span style="color: black;">Augmented Reality</span> <br> Innovation</h1>
+          </div>
+          
+        <!-- <div class="heading">
             <h2 class="divider gradient" contenteditable>
             Augmented Reality
         </h2>
@@ -143,8 +168,9 @@
             <p style="margin-bottom: 0rem;">Our Brand new BETA feature to implement Augmented in our surrounding with a
                 click of a button..........</p>
             <p>Go try and give our honest reviews as its most valuable to us</p>
-        </div><br>
-
+        </div><br> -->
+     
+        
         <div class="shop-container">
 
             <div class="box">
