@@ -17,7 +17,7 @@ app.use(express.json());
 // const cors = require('cors');
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://checkout.stripe.com"],
+    origin: ["https://decor-deck.onrender.com"],
   })
 );
 
@@ -37,7 +37,7 @@ app.get("/cancel", (req, res) => {
 
 let stripeGateway = stripe(process.env.stripe_api);
 
-app.post("/https://decor-deck.onrender.com/stripe-checkout", async (req, res) => {
+app.post("/stripe-checkout", async (req, res) => {
   try {
     // Ensure req.body and req.body.items are defined
     if (!req.body || !req.body.items) {
