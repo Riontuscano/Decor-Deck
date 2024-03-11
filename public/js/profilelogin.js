@@ -46,43 +46,45 @@ let info = JSON.parse(localStorage.getItem('authinfo'))
 // console.log(JSON.parse(localStorage.getItem('authinfo')))
 // console.log(info['access_token'])
 // console.log(info['expires_in'])
-if(info['access_token'] != null){
-fetch("https://www.googleapis.com/oauth2/v3/userinfo",{
-  headers: { 
-    'Authorization':`Bearer ${info['access_token']}`, 
-}
-})
-.then((data)=>data.json())
-.then((info)=> {
-    // console.log(info)
- 
-    document.getElementById("profile-name").innerHTML += info.name;
-    document.getElementById("profile-img").setAttribute('src',info.picture);
-    if(info.picture){
-    document.getElementById("main-profile-img").setAttribute('src',info.picture);
-    }else{
-      document.getElementById("main-profile-img").setAttribute('src',"./img/default-profile.png");
-    }
-    if(info.name!=undefined){
-      document.getElementById("profile-logout").style.display="flex";
-      document.getElementById("profile-editprofile").style.display="flex";
-      document.getElementById("profile-login").style.display="none";
-      document.querySelector(".info-user").style.display="flex";
-      document.getElementById("cartbtn").style.display="flex";
-      document.getElementById("note").style.display="none";
-    }
-    else{
-      document.getElementById("profile-logout").style.display="none";
-      document.querySelector(".info-user").style.display="none";
-      document.getElementById("profile-editprofile").style.display="none";
-      document.getElementById("profile-login").style.display="flex";
-      document.getElementById("cartbtn").style.display="none";
-      document.getElementById("note").style.display="block";
-    }
-})
-} else{
+try {
+  fetch("https://www.googleapis.com/oauth2/v3/userinfo",{
+    headers: { 
+      'Authorization':`Bearer ${info['access_token']}`, 
+  }
+  })
+  .then((data)=>data.json())
+  .then((info)=> {
+      // console.log(info)
+   
+      document.getElementById("profile-name").innerHTML += info.name;
+      document.getElementById("profile-img").setAttribute('src',info.picture);
+      if(info.picture){
+      document.getElementById("main-profile-img").setAttribute('src',info.picture);
+      }else{
+        document.getElementById("main-profile-img").setAttribute('src',"./img/default-profile.png");
+      }
+      if(info.name!=undefined){
+        document.getElementById("profile-logout").style.display="flex";
+        document.getElementById("profile-editprofile").style.display="flex";
+        document.getElementById("profile-login").style.display="none";
+        document.querySelector(".info-user").style.display="flex";
+        document.getElementById("cartbtn").style.display="flex";
+        document.getElementById("note").style.display="none";
+      }
+      else{
+        document.getElementById("profile-logout").style.display="none";
+        document.querySelector(".info-user").style.display="none";
+        document.getElementById("profile-editprofile").style.display="none";
+        document.getElementById("profile-login").style.display="flex";
+        document.getElementById("cartbtn").style.display="none";
+        document.getElementById("note").style.display="block";
+      }
+  })
+} catch (error) {
   document.getElementById("cartbtn").style.display="none";
 }
+
+
 function profilelogout() {
   fetch("https://oauth2.googleapis.com/revoke?token=" + info['access_token'], {
     method: 'POST',
