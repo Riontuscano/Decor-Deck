@@ -37,7 +37,7 @@ app.get("/cancel", (req, res) => {
 
 let stripeGateway = stripe(process.env.stripe_api);
 
-app.post("/stripe-checkout", async (req, res) => {
+app.post("https://decor-deck.onrender.com/stripe-checkout", async (req, res) => {
   try {
     // Ensure req.body and req.body.items are defined
     if (!req.body || !req.body.items) {
