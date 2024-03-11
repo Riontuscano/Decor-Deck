@@ -1,7 +1,7 @@
 const payBtn = document.querySelector('.cart-btn');
 payBtn.addEventListener('click', () => {
   console.log(JSON.parse(localStorage.getItem('cartItems')));
-  fetch('/stripe-checkout', { // Update the base URL
+  fetch('https://localhost:3000/stripe-checkout', { // Update the base URL
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
