@@ -70,7 +70,6 @@ fetch("https://www.googleapis.com/oauth2/v3/userinfo",{
       document.querySelector(".info-user").style.display="flex";
       document.getElementById("cartbtn").style.display="flex";
       document.getElementById("note").style.display="none";
-
     }
     else{
       document.getElementById("profile-logout").style.display="none";
@@ -81,6 +80,11 @@ fetch("https://www.googleapis.com/oauth2/v3/userinfo",{
       document.getElementById("note").style.display="block";
     }
 })
+.catch((error) => {
+  console.error('Login failed:', error);
+  document.getElementById("note").style.display="none";
+
+})
 
 function profilelogout() {
   fetch("https://oauth2.googleapis.com/revoke?token=" + info['access_token'], {
@@ -90,7 +94,7 @@ function profilelogout() {
     }
   })
   .then((data) => {
-    // Update the UI after successful logout
+
     document.getElementById("profile-logout").style.display = "none";
     document.querySelector(".info-user").style.display = "none";
     document.getElementById("profile-editprofile").style.display = "none";
@@ -98,7 +102,7 @@ function profilelogout() {
     document.getElementById("cartbtn").style.display="none";
     document.getElementById("note").style.display="block";
     document.getElementById("main-profile-img").setAttribute('src',"./img/default-profile.png");
-    // location.href = "http://localhost:3000"; // Redirect if needed
+
   })
   .catch((error) => {
     console.error('Logout failed:', error);
