@@ -46,7 +46,7 @@ let info = JSON.parse(localStorage.getItem('authinfo'))
 // console.log(JSON.parse(localStorage.getItem('authinfo')))
 // console.log(info['access_token'])
 // console.log(info['expires_in'])
-
+if(info['access_token'] != null){
 fetch("https://www.googleapis.com/oauth2/v3/userinfo",{
   headers: { 
     'Authorization':`Bearer ${info['access_token']}`, 
@@ -80,12 +80,9 @@ fetch("https://www.googleapis.com/oauth2/v3/userinfo",{
       document.getElementById("note").style.display="block";
     }
 })
-.catch((error) => {
-  console.error('Login failed:', error);
-  document.getElementById("note").style.display="none";
-
-})
-
+} else{
+  document.getElementById("cartbtn").style.display="none";
+}
 function profilelogout() {
   fetch("https://oauth2.googleapis.com/revoke?token=" + info['access_token'], {
     method: 'POST',
