@@ -17,7 +17,7 @@ app.use(express.json());
 // const cors = require('cors');
 app.use(
   cors({
-    origin: ["https://decor-deck.onrender.com"],
+    origin: ["http://localhost:3000", "https://checkout.stripe.com"],
   })
 );
 
