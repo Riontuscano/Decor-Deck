@@ -54,7 +54,7 @@ try {
   })
   .then((data)=>data.json())
   .then((info)=> {
-      // console.log(info)
+      // console.log(info.email)
    
       document.getElementById("profile-name").innerHTML += info.name;
       document.getElementById("profile-img").setAttribute('src',info.picture);

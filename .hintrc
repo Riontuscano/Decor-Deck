@@ -38,6 +38,7 @@
           "-webkit-filter"
         ]
       }
-    ]
+    ],
+    "highest-available-document-mode": "off"
   }
 }

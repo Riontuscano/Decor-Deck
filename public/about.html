@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decor-Deck :- About Us | Contact Us </title>
+    <meta name="title" content="Decor-Deck">
+    <meta name="description" content=" An Online Furniture App with implementation of Augmented reality">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="shortcut icon" href="./img/favicon.ico" sizes="32x32" type="image/x-icon">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="./css/swiper-bundle.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+.about-us{
+  height: 100vh;
+  width: 100%;
+  padding: 90px 0;
+  background: #ffffff;
+}
+.pic{
+  height: 500px;
+  width:  420px;
+  object-fit: cover;
+}
+.about{
+  width: 1130px;
+  max-width: 85%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.text{
+  width: 540px;
+}
+.text h2{
+  font-size: 90px;
+  font-weight: 600;
+  margin-bottom: 10px;
+
+}
+.text h5{
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+span{
+  color: #83b735;
+}
+.text p{
+  font-size: 18px;
+  line-height: 25px;
+  letter-spacing: 1px;
+}
+.data{
+  margin-top: 30px;
+}
+.hire{
+  font-size: 18px;
+  background: #83b735;
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  padding: 8px 25px;
+  border-radius: 8px;
+  transition: 0.5s;
+}
+.hire:hover{
+  background: #000;
+  border: 1px solid #83b735;
+}
+</style>
+</head>
+
+<body>
+    <header>
+
+        <p href="#" class="logo"><img src="./img/Final-logo.png" alt="logo" width="40px">Decor<span>Deck</span></p>
+
+        <ul class="navbar">
+            <li><a href="/" >Home</a></li>
+            <li><a href="#"style="color: #83b735;">About</a></li>
+            <li><a href="#blog">Blog</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <ul class="auth">
+          
+            <div class="bx bx-menu" id="menu-icon"></div>
+            <img src="./img/default-profile.png" alt="profile" class="nav-profile-login" id="main-profile-img"
+                onclick="toggleprofile()">
+            <div class="sub-wrap" id="subwrap">
+                <div class="submenu">
+                    <div class="info-user">
+                        <img src="" alt="" id="profile-img">
+                        <h4 id="profile-name"></h4>
+                    </div>
+                    <hr>
+                    <a href="#" class="sub-menu-link" id="profile-editprofile">
+                        <i class='bx bxs-cog'></i>
+                        <p>Edit-profile</p>
+                        <span>></span>
+                    </a>
+                    <a href="https://mail.google.com/mail/u/0/#inbox?compose=CllgCJqTfglMlTbWdhkfQjBbrSxJVcGQtvKmQgrzGZSZWLsLLQxstpsMfXtrhSfHHwhpmGdMsmg-"
+                        class="sub-menu-link">
+                        <i class='bx bx-support'></i>
+                        <p>Help-Support</p>
+                        <span>></span>
+                    </a>
+                    <a href="#" class="sub-menu-link" id="profile-logout" onclick="profilelogout()">
+                        <i class='bx bx-log-out'></i>
+                        <p>Log-out</p>
+                        <span>></span>
+                    </a>
+                    <a href="#" class="sub-menu-link" id="profile-login" onclick="profilelogin()">
+                        <i class='bx bx-log-in'></i>
+                        <p>Sign-up</p>
+                        <span>></span>
+                    </a>
+                </div>
+            </div>
+
+        </ul>
+
+    </header>
+  <section class="about-us">
+    <div class="about">
+      <img src="./img/ME.jpeg" alt="me" class="pic">
+      <div class="text">
+        <h2> <span> About</span> Me</h2>
+        <h5>Full Stack & Webxr Developer<span>/Designer</span></h5>
+          <p>Welcome to DecorDeck! I'm Rion Tuscano, a passionate Full Stack Developer and WebXR enthusiast dedicated to crafting immersive and engaging web experiences. With a blend of creativity and technical expertise, I strive to bring your vision to life and transform your ideas into reality!
+            At DecorDeck, we believe in the power of technology to elevate the way people interact with furniture and home decor. Our mission is to create innovative and immersive web experiences that redefine the online furniture shopping experience. 
+          </p>
+        <div class="data">
+        <a href="https://www.linkedin.com/in/rion-tuscano-1b5008263/" class="hire">Contact Me</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="footer-dark">
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-md-3 item">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Home Decor</a></li>
+                        <li><a href="#">Furniture</a></li>
+                        <li><a href="#">Home/Room Customization</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-md-3 item">
+                    <h3>About</h3>
+                    <ul>
+                        <li><a href="#">Company</a></li>
+                        <li><a href="#">Team</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-6 item text">
+                    <h3>Decor Deck</h3>
+                    <p> At DecorDeck, we believe in the power of technology to elevate the way people interact with furniture and home decor. Our mission is to create innovative and immersive web experiences that redefine the online furniture shopping experience !!</p>
+                </div>
+                <div class="col item social" id="contact">
+                    <a href="https://www.facebook.com/rio.tuscano.1/" class="facebook"><ion-icon name="logo-facebook"></ion-icon></a>
+                    <a href="https://twitter.com/Itsmrrio" class="twitter"><ion-icon name="logo-twitter"></ion-icon></a>
+                    <a href="https://mail.google.com/mail/u/0/#inbox?compose=sJwlqMmsSFfDdGrrSxpwhmGBwgrvxjQhzbVvLjWQJbclfJwMdhwKhsWfRcncghBjqcCJVrjZGxjHHFbzrdMgRwzbtqhShKzccKBnpNrChGBNqHfXkxwTnTbmldTGPlhNPmCxDCnTzKmGBwXMDhGgnLGKwWgvrHtjb" class="google"><ion-icon name="logo-google"></ion-icon></a>
+                    <a href="https://www.instagram.com/itsmerio13/" class="instagram"><ion-icon name="logo-instagram"></ion-icon></a>
+
+                </div>
+            </div>
+            <p class="copyright">Copyright @2024 | Designed With by <u> Decor Deck </u></p>
+        </div>
+    </footer>
+</div>
+
+    <!----------------------------------------------- script setion ----------------------------------------------------------------------->
+
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"></script>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+  <script src="./js/swiper-bundle.min.js"></script>
+  <script src="./js/script.js"></script>
+  <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+  <script src="https://kit.fontawesome.com/c8e4d183c2.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="./js/cart.js"></script>
+  <script src="./js/profilelogin.js"></script>
+
+</body>
+</html>

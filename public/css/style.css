@@ -918,9 +918,11 @@ header {
 }
 
 .footer-dark .item.social .facebook:hover {
+
   /* opacity:0.9; */
   color: #316FF6;
 }
+
 
 .footer-dark .item.social .twitter:hover {
   /* opacity:0.9; */
