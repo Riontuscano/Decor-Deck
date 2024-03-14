@@ -16,14 +16,9 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap');
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
+
 .about-us{
-  height: 100vh;
+  height: 100%;
   width: 100%;
   padding: 90px 0;
   background: #ffffff;
@@ -33,6 +28,11 @@
   width:  420px;
   object-fit: cover;
 }
+/* .pic1{
+  height: 500px;
+  width:  420px;
+  object-fit: cover;
+} */
 .about{
   width: 1130px;
   max-width: 85%;
@@ -79,6 +79,31 @@ span{
 .hire:hover{
   background: #000;
   border: 1px solid #83b735;
+}
+@media (max-width: 768px) {
+  .text h2{
+  font-size: 40px;
+}
+.text{
+  width: 380px;
+}
+.pic{
+  height: 300px;
+  width:  220px;
+  object-fit: cover;
+}
+.pic{
+  display: none;
+}
+.text h5{
+  font-size: 18px;
+ 
+}
+.text p{
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.8px;
+}
 }
 </style>
 </head>
@@ -175,8 +200,8 @@ span{
                 <div class="col item social" id="contact">
                     <a href="https://www.facebook.com/rio.tuscano.1/" class="facebook"><ion-icon name="logo-facebook"></ion-icon></a>
                     <a href="https://twitter.com/Itsmrrio" class="twitter"><ion-icon name="logo-twitter"></ion-icon></a>
-                    <a href="https://mail.google.com/mail/u/0/#inbox?compose=sJwlqMmsSFfDdGrrSxpwhmGBwgrvxjQhzbVvLjWQJbclfJwMdhwKhsWfRcncghBjqcCJVrjZGxjHHFbzrdMgRwzbtqhShKzccKBnpNrChGBNqHfXkxwTnTbmldTGPlhNPmCxDCnTzKmGBwXMDhGgnLGKwWgvrHtjb" class="google"><ion-icon name="logo-google"></ion-icon></a>
-                    <a href="https://www.instagram.com/itsmerio13/" class="instagram"><ion-icon name="logo-instagram"></ion-icon></a>
+                    <a href="https://mail.google.com/mail/u/0/#inbox?compose=DmwnWrRpdLlVlTzNWcqgJpWdltFBjWTGFspMcJDjKRmSVcvLnpkbSncnfFDrxkXpdZthKNDXGqHl" class="google"><ion-icon name="logo-google"></ion-icon></a>
+                    <a href="#" class="instagram"><ion-icon name="logo-instagram"></ion-icon></a>
 
                 </div>
             </div>
