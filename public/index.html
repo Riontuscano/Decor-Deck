@@ -26,7 +26,6 @@
         <ul class="navbar">
             <li><a href="#home" style="color: #83b735;">Home</a></li>
             <li><a href="shop.html">Shop</a></li>
-            <!-- <li><a href="#new">New Launch</a></li> -->
             <li><a href="about.html">About</a></li>
             <li><a href="#blog">Blog</a></li>
             <li><a href="#aug">Try Augmented</a></li>
@@ -533,10 +532,10 @@
                     </div>
                     <textarea name="newsletter-rev" class="newsletter-rev1" id="onlyphone" cols="30" rows="10"
                         placeholder="Write a Review...." resize="none"></textarea>
-                    <form>
+                    <form id="myForm">
                         <div class="input-group flex" id="cus-rev">
-                            <input type="email" class="form-control bg-light-grey" placeholder="Enter Email..........">
-                            <button type="submit" class="btn bg-dark text-white text-uppercase">subscribe</button>
+                            <input type="email" class="form-control bg-light-grey" placeholder="Enter Email.........." id="emailjs">
+                            <button type="button" class="btn bg-dark text-white text-uppercase" onclick="sendMail()">subscribe</button>
                         </div>
                     </form>
                 </div>
@@ -601,6 +600,7 @@
         <script src="https://js.stripe.com/v3/"></script>
         <script src="./js/cart.js"></script>
         <script src="./js/profilelogin.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
         <script>
             var typed = new Typed(".color1", {
@@ -639,7 +639,34 @@
             });
 
         </script>
+<script>
+    function sendMail(){
+        (function(){
+            emailjs.init("xw3FPKrCHTMEagV64")
+        })();
 
+        var params ={
+            sendername: "Decor Deck",
+            from_name:"decordeck.work@gmail.com",
+            to_name:document.querySelector("#emailjs").value,
+            to:document.querySelector("#emailjs").value,
+            subject:"Thank you for Visiting Decor Deck",
+            replayto:"decordeck.work@gmail.com",
+            message:"Thank you for response much appreciated!!!!"
+        };
+        var serviceID = "service_7q1dg9y";
+        var templateID = "template_58upefs";
+
+        emailjs.send(serviceID, templateID,params)
+        .then(res=> {
+            alert("Mail sent successfully");
+            console.log(res.status, res.text)
+        })
+        document.getElementById("myForm").reset();
+        document.getElementsByClassName("newsletter-rev").value =" ";
+        document.getElementsByClassName("newsletter-rev1").value =" ";
+    }
+</script>
 </body>
 
 </html>
