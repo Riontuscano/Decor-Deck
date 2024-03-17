@@ -527,7 +527,7 @@
 
                     </div> <br>
                     <div class="news-rev">
-                        <textarea name="newsletter-rev" class="newsletter-rev" cols="30" rows="10"
+                        <textarea name="newsletter-rev" class="newsletter-rev" id="onlypc" cols="30" rows="10"
                             placeholder="Write a Review......" resize="none"></textarea>
                     </div>
                     <textarea name="newsletter-rev" class="newsletter-rev1" id="onlyphone" cols="30" rows="10"
@@ -659,12 +659,12 @@
 
         emailjs.send(serviceID, templateID,params)
         .then(res=> {
-            alert("Mail sent successfully");
+            alert("Response Sent!!");
             console.log(res.status, res.text)
+            document.getElementById("myForm").reset();
+            document.getElementById("onlypc").value = " ";
+            document.getElementById("onlyphone").value = " ";
         })
-        document.getElementById("myForm").reset();
-        document.getElementsByClassName("newsletter-rev").value =" ";
-        document.getElementsByClassName("newsletter-rev1").value =" ";
     }
 </script>
 </body>
