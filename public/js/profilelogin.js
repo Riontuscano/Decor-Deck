@@ -10,7 +10,7 @@ function profilelogin(){
     "client_id":"771114475204-olqejspffto4g9kikfqqcmbn3bakqd78.apps.googleusercontent.com",
     "redirect_uri":"http://localhost:3000",
     "response_type":"token",
-    "scope":"https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/youtube.readonly",
+    "scope":"https://www.googleapis.com/auth/userinfo.profile",
     "include_granted_scopes":"true",
     "state":"pass-through-value",
   }
