@@ -112,10 +112,7 @@ header {
   padding-right: 2px;
 }
 
-/* .items{
-    padding: 7px 32px;
-    display: flex;
-} */
+
 .dropdown {
   position: relative;
   display: inline-block;
