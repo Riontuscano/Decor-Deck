@@ -38,7 +38,6 @@ if(Object.keys(profileparams).length >0){
   localStorage.setItem('authinfo',JSON.stringify(profileparams))
 }
 
-//hide the access token
 
 window.history.pushState({},document.title)
 
@@ -57,10 +56,15 @@ try {
   
       // console.log(info.email)
    
-      document.getElementById("profile-name").innerHTML += info.name;
-      document.getElementById("profile-img").setAttribute('src',info.picture);
+
+      const demoname = info.name.split(" ")[0].toLowerCase();
+      const firstname = demoname.charAt(0).toUpperCase() + demoname.slice(1).toLowerCase()
+      const lastname = info.name.split(" ")[1]
+      
+      document.getElementById("profile-name").innerHTML += `${firstname} ${lastname}`;
       if(info.picture){
-      document.getElementById("main-profile-img").setAttribute('src',info.picture);
+      document.getElementById("profile-img").setAttribute('src',info.picture != undefined ? info.picture :`https://avatar.iran.liara.run/username?username=[${firstname}+${lastname}]`);
+      document.getElementById("main-profile-img").setAttribute('src',info.picture != undefined ? info.picture :`https://avatar.iran.liara.run/username?username=[${firstname}+${lastname}]`);
       }else{
         document.getElementById("main-profile-img").setAttribute('src',"./img/default-profile.png");
       }

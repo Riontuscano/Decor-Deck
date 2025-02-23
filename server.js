@@ -14,7 +14,6 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 app.use(express.json());
 
-// const cors = require('cors');
 app.use(
   cors({
     origin: ["http://localhost:3000", "https://checkout.stripe.com"],
@@ -24,22 +23,20 @@ app.use(
 app.get("/", (req, res) => {
   res.sendFile("index.html", { root: "public" });
 });
-//sucess
+
 app.get("/success", (req, res) => {
   res.sendFile("success.html", { root: "public" });
 });
-//cancel
+
 app.get("/cancel", (req, res) => {
   res.sendFile("cancel.html", { root: "public" });
 });
 
-// stripe Payment Gateway
 
-let stripeGateway = stripe(process.env.stripe_api);
+let stripeGateway = stripe(process.env.STRIPE_API);
 
 app.post("/stripe-checkout", async (req, res) => {
   try {
-    // Ensure req.body and req.body.items are defined
     if (!req.body || !req.body.items) {
       throw new Error("Invalid request body");
     }
@@ -59,7 +56,6 @@ app.post("/stripe-checkout", async (req, res) => {
       };
     });
 
-    // Create Checkout session
     const session = await stripeGateway.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",

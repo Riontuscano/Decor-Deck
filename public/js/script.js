@@ -387,8 +387,7 @@ function change(num){
     const shopContainer =  document.getElementsByClassName("shop-container");
     var products = product[1]
     products.forEach((product) => {
-      const productHTML = createProductHTML(product);
-      // console.log(productHTML);
+      const productHTML = createProductHTML(product);x=
       shopContainer.innerHTML += productHTML;
     });
   }
