@@ -1,0 +1,32 @@
+{
+    "website_info": {
+      "name": "Decor-Deck",
+      "description": "An online furniture store with augmented reality features to visualize products in your space",
+      "features": [
+        "Augmented reality furniture preview",
+        "Wide selection of home and office furniture",
+        "Easy returns policy",
+        "Convenient payment options"
+      ],
+      "sections": {
+        "home": "Showcases featured furniture collections",
+        "shop": "Browse and purchase furniture items",
+        "about": "Company information and values",
+        "augmented": "Try furniture in your space using AR",
+        "contact": "Get in touch with customer support"
+      }
+    },
+    "products": {
+      "categories": ["Chairs", "Sofas", "Tables", "Beds", "Storage"],
+      "materials": ["Wood", "Metal", "Fabric", "Leather", "Plastic"]
+    },
+    "policies": {
+      "returns": "30-day easy return policy",
+      "shipping": "Free shipping on orders over ₹5000",
+      "warranty": "1-year manufacturer warranty on all products"
+    },
+    "ar_features": {
+      "description": "Our AR feature lets you visualize furniture in your actual space using your phone's camera",
+      "how_to": "1. Select a product 2. Tap 'Try in AR' 3. Point your camera 4. See it in your room"
+    }
+  }

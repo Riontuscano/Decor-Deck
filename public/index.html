@@ -575,6 +575,22 @@
                 </div>
             </footer>
         </div>
+        <!-- Chatbot UI -->
+<div class="chatbot-container" id="chatbotContainer">
+    <div class="chatbot-header">
+      <h4>Decor-Deck Assistant</h4>
+      <button id="closeChatbot">×</button>
+    </div>
+    <div class="chatbot-messages" id="chatbotMessages"></div>
+    <div class="chatbot-input">
+      <input type="text" id="chatbotInput" placeholder="Ask me about furniture...">
+      <button id="sendMessage">Send</button>
+    </div>
+  </div>
+  <button class="chatbot-toggle" id="chatbotToggle">
+    <i class='bx bx-chat'></i>
+  </button>
+  
 
 
 
@@ -665,6 +681,143 @@
             document.getElementById("onlyphone").value = " ";
         })
     }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+  // DOM Elements
+  const chatbotContainer = document.getElementById('chatbotContainer');
+  const chatbotToggle = document.getElementById('chatbotToggle');
+  const closeChatbot = document.getElementById('closeChatbot');
+  const chatbotMessages = document.getElementById('chatbotMessages');
+  const chatbotInput = document.getElementById('chatbotInput');
+  const sendMessageBtn = document.getElementById('sendMessage');
+  
+  // State management
+  let chatHistory = [];
+  let isProcessing = false;
+
+  // Initialize chatbot
+  function initChatbot() {
+    // Add welcome message
+    addMessage("Hello! I'm your Decor-Deck assistant. How can I help you with furniture today?", 'bot');
+    
+    // Load any saved chat history from localStorage
+    const savedHistory = localStorage.getItem('decorDeckChatHistory');
+    if (savedHistory) {
+      try {
+        chatHistory = JSON.parse(savedHistory);
+        // Optional: Display last few messages from history
+      } catch (e) {
+        console.error("Failed to load chat history", e);
+      }
+    }
+  }
+
+  // Toggle chatbot visibility
+  chatbotToggle.addEventListener('click', () => {
+    chatbotContainer.classList.toggle('active');
+    if (chatbotContainer.classList.contains('active')) {
+      chatbotInput.focus();
+    }
+  });
+
+  closeChatbot.addEventListener('click', () => {
+    chatbotContainer.classList.remove('active');
+  });
+
+  // Add message to chat UI
+  function addMessage(content, sender) {
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message', `${sender}-message`);
+    
+    // Format links and special content
+    const formattedContent = content.replace(
+      /(https?:\/\/[^\s]+)/g, 
+      '<a href="$1" target="_blank">$1</a>'
+    );
+    
+    messageElement.innerHTML = formattedContent;
+    chatbotMessages.appendChild(messageElement);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+  }
+
+  // Send message to backend
+  async function sendMessage() {
+    const message = chatbotInput.value.trim();
+    if (!message || isProcessing) return;
+
+    isProcessing = true;
+    sendMessageBtn.disabled = true;
+    chatbotInput.disabled = true;
+
+    // Add user message to chat
+    addMessage(message, 'user');
+    chatbotInput.value = '';
+    
+    try {
+      // Show typing indicator
+      const typingIndicator = document.createElement('div');
+      typingIndicator.classList.add('message', 'bot-message');
+      typingIndicator.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+      chatbotMessages.appendChild(typingIndicator);
+      chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+      // Call backend API
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message,
+          chatHistory
+        })
+      });
+
+      // Remove typing indicator
+      chatbotMessages.removeChild(typingIndicator);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      // Add bot response to chat
+      addMessage(data.response, 'bot');
+      chatHistory = data.chatHistory;
+      
+      // Save chat history
+      localStorage.setItem('decorDeckChatHistory', JSON.stringify(chatHistory));
+      
+    } catch (error) {
+      console.error('Chat error:', error);
+      addMessage("Sorry, I'm having trouble connecting. Please try again later.", 'bot');
+      
+      // Optionally retry or show more specific error messages
+      if (error.message.includes('Failed to fetch')) {
+        addMessage("It seems I'm offline. Please check your internet connection.", 'bot');
+      }
+    } finally {
+      isProcessing = false;
+      sendMessageBtn.disabled = false;
+      chatbotInput.disabled = false;
+      chatbotInput.focus();
+    }
+  }
+
+  // Event listeners
+  sendMessageBtn.addEventListener('click', sendMessage);
+  
+  chatbotInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
+
+  // Initialize when page loads
+  initChatbot();
+});
 </script>
 </body>
 
