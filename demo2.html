@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReimagineHome API Demo</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        #output { margin-top: 20px; }
+        img { max-width: 100%; border: 1px solid #ddd; border-radius: 8px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>ReimagineHome API Demo</h1>
+    <input type="text" id="imageUrlInput" placeholder="Enter Image URL">
+    <button onclick="startImageProcessing()">Generate Image</button>
+    <div id="output"></div>
+
+    <script>
+        const apiKey = '67e2d1123db0b9df7fe657f3'; // Replace with your API key
+        const createApiUrl = 'https://api.reimaginehome.ai/v1/create_mask';
+        const resultApiUrl = 'https://api.reimaginehome.ai/v1/generate_image';
+        let jobId = null;
+        let pollCount = 0;
+        const maxPolls = 12; // Stop polling after 12 attempts (2 minutes)
+
+        async function startImageProcessing() {
+            const imageUrl = document.getElementById('imageUrlInput').value;
+            if (!imageUrl) {
+                alert("Please enter a valid image URL.");
+                return;
+            }
+            document.getElementById('output').textContent = "Processing...";
+            
+            const requestBody = JSON.stringify({ "image_url": imageUrl });
+
+            try {
+                const response = await fetch(createApiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'api-key': apiKey,
+                        'Content-Type': 'application/json'
+                    },
+                    body: requestBody
+                });
+
+                const responseData = await response.json();
+                console.log("Raw API Response:", responseData);
+                
+                if (responseData.status === "success" && responseData.data?.job_id) {
+                    jobId = responseData.data.job_id;
+                    console.log("Received job ID:", jobId);
+                    pollCount = 0;
+                    checkForResult();
+                } else {
+                    document.getElementById('output').textContent = "Error: No job ID received.";
+                }
+            } catch (error) {
+                document.getElementById('output').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function checkForResult() {
+            if (!jobId) return;
+            
+            const pollInterval = setInterval(async () => {
+                if (pollCount >= maxPolls) {
+                    clearInterval(pollInterval);
+                    document.getElementById('output').textContent = "Processing timed out. Try again later.";
+                    return;
+                }
+                
+                try {
+                    const requestUrl = `${resultApiUrl}/${jobId}`;
+                    console.log(`Fetching from: ${requestUrl}`);
+                    const response = await fetch(requestUrl, {
+                        method: 'GET',
+                        headers: { 'api-key': apiKey }
+                    });
+                    
+                    const data = await response.json();
+                    console.log("Polling Response:", data);
+                    
+                    if (data.status === "success" && data.data?.job_status === "done" && data.data.generated_images?.length) {
+                        clearInterval(pollInterval);
+                        document.getElementById('output').innerHTML = data.data.generated_images.map(imgUrl => `<img src="${imgUrl}" alt="Generated Image">`).join('');
+                    } else {
+                        console.log("Job still processing...");
+                        pollCount++;
+                    }
+                } catch (error) {
+                    clearInterval(pollInterval);
+                    document.getElementById('output').textContent = `Error: ${error.message}`;
+                }
+            }, 10000); // Check every 10 seconds
+        }
+    </script>
+</body>
+</html>
