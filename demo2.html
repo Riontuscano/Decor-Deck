@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+
+
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -198,15 +200,6 @@
             100% { transform: rotate(360deg); }
         }
         
-        .error-message {
-            color: #d32f2f;
-            margin-top: 1rem;
-            display: none;
-            padding: 10px;
-            background-color: #ffebee;
-            border-radius: 4px;
-        }
-        
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
@@ -242,7 +235,6 @@
             <input type="file" id="fileInput" class="file-input" accept="image/png, image/jpeg, image/jpg">
             <button class="upload-btn" id="uploadBtn">Select Image</button>
             <p class="disclaimer">Our AI may not preserve watermarks on uploaded images. We recommend using images without watermarks.</p>
-            <p class="error-message" id="errorMessage"></p>
         </div>
         
         <div class="loading" id="loadingIndicator">
@@ -294,17 +286,6 @@
         const resultSection = document.getElementById('resultSection');
         const originalImage = document.getElementById('originalImage');
         const generatedImage = document.getElementById('generatedImage');
-        const errorMessage = document.getElementById('errorMessage');
-        
-        // API Configuration
-        const API_KEY = '67e79838d2f8895e8440ee24';
-        const API_BASE_URL = 'https://api.reimaginehome.ai/v1';
-        const CREATE_MASK_API = `${API_BASE_URL}/create_mask`;
-        const JOB_RESULT_API = `${API_BASE_URL}/job/result`;
-        let jobId = null;
-        let pollInterval = null;
-        const MAX_POLL_ATTEMPTS = 30; // 5 minutes with 10 second intervals
-        let pollAttempts = 0;
         
         // Event Listeners
         uploadBtn.addEventListener('click', () => fileInput.click());
@@ -335,21 +316,17 @@
         });
         
         // Handle image upload
-        async function handleImageUpload(file) {
-            // Reset previous state
-            hideError();
-            resultSection.style.display = 'none';
-            
+        function handleImageUpload(file) {
             // Check file type
             const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
             if (!validTypes.includes(file.type)) {
-                showError('Please upload a valid image file (JPEG, PNG, JPG)');
+                alert('Please upload a valid image file (JPEG, PNG, JPG)');
                 return;
             }
             
             // Check file size (25MB max)
             if (file.size > 25 * 1024 * 1024) {
-                showError('File size exceeds 25MB limit');
+                alert('File size exceeds 25MB limit');
                 return;
             }
             
@@ -357,189 +334,78 @@
             const reader = new FileReader();
             reader.onload = (e) => {
                 originalImage.src = e.target.result;
+                
+                // Show loading indicator
+                loadingIndicator.style.display = 'block';
+                resultSection.style.display = 'none';
+                
+                // Simulate AI processing (in a real app, this would call an API)
+                setTimeout(() => {
+                    // For demo purposes, we'll just modify the original image slightly
+                    // In a real implementation, you would receive the generated image from an API
+                    loadingIndicator.style.display = 'none';
+                    generatedImage.src = applyDemoFilter(e.target.result);
+                    resultSection.style.display = 'block';
+                }, 3000);
             };
             reader.readAsDataURL(file);
-
-            // Show loading indicator
-            loadingIndicator.style.display = 'block';
-            
-            try {
-                // Create FormData for the API request
-                const formData = new FormData();
-                formData.append('image', file);
-                
-                // Call the API to create mask and start processing
-                const response = await fetchWithTimeout(CREATE_MASK_API, {
-                    method: 'POST',
-                    headers: {
-                        'api-key': API_KEY
-                    },
-                    body: formData,
-                    timeout: 15000 // 15 seconds timeout
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                
-                if (data.status === "success" && data.data?.job_id) {
-                    jobId = data.data.job_id;
-                    pollAttempts = 0;
-                    startPollingForResults();
-                } else {
-                    throw new Error(data.message || "No job ID received from API");
-                }
-            } catch (error) {
-                loadingIndicator.style.display = 'none';
-                showError(`Failed to start processing: ${getErrorMessage(error)}`);
-                console.error("API Error:", error);
-            }
         }
         
-        // Fetch with timeout
-        async function fetchWithTimeout(resource, options = {}) {
-            const { timeout = 8000 } = options;
+        // Demo function to simulate AI processing
+        function applyDemoFilter(imageSrc) {
+            // This is just for demonstration - in a real app you would call an API
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
             
-            const controller = new AbortController();
-            const id = setTimeout(() => controller.abort(), timeout);
+            img.src = imageSrc;
+            canvas.width = img.width;
+            canvas.height = img.height;
             
-            const response = await fetch(resource, {
-                ...options,
-                signal: controller.signal  
-            }).catch(error => {
-                if (error.name === 'AbortError') {
-                    throw new Error('Request timed out');
-                }
-                throw error;
-            });
+            // Apply some simple filters to simulate AI processing
+            ctx.filter = 'brightness(1.1) contrast(1.1) saturate(1.2)';
+            ctx.drawImage(img, 0, 0);
             
-            clearTimeout(id);
-            return response;
+            // Add some decorative elements to simulate furniture
+            ctx.fillStyle = '#4a6bff';
+            ctx.globalAlpha = 0.3;
+            ctx.fillRect(canvas.width * 0.2, canvas.height * 0.7, canvas.width * 0.2, canvas.height * 0.15);
+            ctx.fillRect(canvas.width * 0.6, canvas.height * 0.7, canvas.width * 0.2, canvas.height * 0.15);
+            ctx.globalAlpha = 1.0;
+            
+            return canvas.toDataURL();
         }
-
-        // Start polling for job results
-        function startPollingForResults() {
-            // Clear any existing polling
-            if (pollInterval) clearInterval(pollInterval);
-            
-            pollInterval = setInterval(async () => {
-                if (pollAttempts >= MAX_POLL_ATTEMPTS) {
-                    clearInterval(pollInterval);
-                    loadingIndicator.style.display = 'none';
-                    showError("Processing timed out. Please try again later.");
-                    return;
-                }
-                
-                pollAttempts++;
-                
-                try {
-                    const response = await fetchWithTimeout(`${JOB_RESULT_API}?job_id=${jobId}`, {
-                        method: 'GET',
-                        headers: {
-                            'api-key': API_KEY,
-                            'Content-Type': 'application/json'
-                        },
-                        timeout: 10000
-                    });
-                    
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-                    }
-
-                    const data = await response.json();
-                    
-                    if (data.status === "success") {
-                        if (data.data?.job_status === "done" && data.data.generated_images?.length) {
-                            // Processing complete
-                            clearInterval(pollInterval);
-                            loadingIndicator.style.display = 'none';
-                            generatedImage.src = data.data.generated_images[0];
-                            resultSection.style.display = 'block';
-                        } else if (data.data?.job_status === "failed") {
-                            clearInterval(pollInterval);
-                            loadingIndicator.style.display = 'none';
-                            showError("Image processing failed. Please try again with a different image.");
-                        }
-                    } else {
-                        throw new Error(data.message || "Unknown error occurred");
-                    }
-                } catch (error) {
-                    console.error("Polling error:", error);
-                    if (error.message.includes('timeout') || error.message.includes('Failed to fetch')) {
-                        // Network issues - continue polling
-                    } else {
-                        clearInterval(pollInterval);
-                        loadingIndicator.style.display = 'none';
-                        showError(`Error checking status: ${getErrorMessage(error)}`);
-                    }
-                }
-            }, 10000); // Poll every 10 seconds
-        }
-
+        
         // Sample image handler
         function useSampleImage(type) {
             let sampleUrl = '';
-            let sampleName = '';
             
             switch(type) {
                 case 'living-room':
                     sampleUrl = 'https://images.unsplash.com/photo-1556911220-bff31c812dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80';
-                    sampleName = 'living-room.jpg';
                     break;
                 case 'bedroom':
                     sampleUrl = 'https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80';
-                    sampleName = 'bedroom.jpg';
                     break;
                 case 'garden':
                     sampleUrl = 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80';
-                    sampleName = 'garden.jpg';
                     break;
             }
             
             // Show loading indicator
             loadingIndicator.style.display = 'block';
             resultSection.style.display = 'none';
-            hideError();
             
-            // For sample images, we need to download them first to create a File object
-            fetch(sampleUrl)
-                .then(response => response.blob())
-                .then(blob => {
-                    const file = new File([blob], sampleName, { type: blob.type });
-                    handleImageUpload(file);
-                })
-                .catch(error => {
-                    loadingIndicator.style.display = 'none';
-                    showError(`Failed to load sample image: ${error.message}`);
-                });
-        }
-
-        // Helper functions
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.style.display = 'block';
-        }
-        
-        function hideError() {
-            errorMessage.style.display = 'none';
-        }
-        
-        function getErrorMessage(error) {
-            if (error.name === 'AbortError') {
-                return 'Request timed out';
-            } else if (error.message.includes('Failed to fetch')) {
-                return 'Network error - please check your connection';
-            } else if (error.message.includes('CORS')) {
-                return 'Cross-origin request blocked - contact support';
-            }
-            return error.message || 'Unknown error occurred';
+            // Set original image
+            originalImage.src = sampleUrl;
+            
+            // Simulate AI processing
+            setTimeout(() => {
+                loadingIndicator.style.display = 'none';
+                generatedImage.src = applyDemoFilter(sampleUrl);
+                resultSection.style.display = 'block';
+            }, 3000);
         }
     </script>
 </body>
 </html>
-
-
