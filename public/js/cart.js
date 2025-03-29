@@ -8,7 +8,7 @@ payBtn.addEventListener('click', () => {
     },
     mode: 'cors',
     body: JSON.stringify({
-      items: JSON.parse(localStorage.getItem('cartItems')),
+      items: JSON.parse(localStorage.getItem('cartItems')), 
     }),
   })
     .then((res) => res.json())
