@@ -172,6 +172,7 @@ function addProductToCart(Title, price, img) {
                       <input type="number" value="1" class="cart-quantity">
                       </div>
                       <ion-icon name="trash" class="cart-remove"></ion-icon>
+                      
                       `;
 
 cartShopBox.innerHTML = cartBoxContent;
