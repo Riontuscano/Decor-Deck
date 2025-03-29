@@ -37,8 +37,16 @@ app.get("/success", (req, res) => {
   res.sendFile("success.html", { root: "public" });
 });
 
+app.get("/about", (req, res) => {
+  res.sendFile("about.html", { root: "public" });
+});
+
 app.get("/cancel", (req, res) => {
   res.sendFile("cancel.html", { root: "public" });
+});
+
+app.get("/Hire", (req, res) => {
+  res.sendFile("designer.html", { root: "public" });
 });
 
 // Stripe Checkout Route

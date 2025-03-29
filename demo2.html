@@ -3,97 +3,543 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReimagineHome API Demo</title>
+    <title>ReimagineHome - AI Room Design</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        #output { margin-top: 20px; }
-        img { max-width: 100%; border: 1px solid #ddd; border-radius: 8px; margin-top: 10px; }
+        :root {
+            --primary-color: #4a6bff;
+            --secondary-color: #f8f9fa;
+            --text-color: #333;
+            --light-gray: #e9ecef;
+            --border-radius: 8px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #fff;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .upload-section {
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            border: 2px dashed var(--light-gray);
+            transition: all 0.3s ease;
+        }
+        
+        .upload-section:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .upload-section.active {
+            border-color: var(--primary-color);
+            background-color: rgba(74, 107, 255, 0.05);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .upload-text {
+            margin-bottom: 1.5rem;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .upload-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .upload-btn:hover {
+            background-color: #3a5ae8;
+        }
+        
+        .disclaimer {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--light-gray);
+        }
+        
+        .photo-guide {
+            margin-top: 3rem;
+        }
+        
+        .guide-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .sample-images {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+        
+        .sample-card {
+            width: 200px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .sample-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .sample-img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        
+        .sample-label {
+            padding: 0.75rem;
+            text-align: center;
+            background-color: white;
+        }
+        
+        .result-section {
+            display: none;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .result-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .result-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .result-column {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .result-label {
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .result-img {
+            max-width: 100%;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary-color);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            color: #d32f2f;
+            margin-top: 1rem;
+            display: none;
+            padding: 10px;
+            background-color: #ffebee;
+            border-radius: 4px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .result-container {
+                flex-direction: column;
+            }
+            
+            .sample-images {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .sample-card {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>ReimagineHome API Demo</h1>
-    <input type="text" id="imageUrlInput" placeholder="Enter Image URL">
-    <button onclick="startImageProcessing()">Generate Image</button>
-    <div id="output"></div>
+    <div class="container">
+        <header>
+            <h1>ReimagineHome</h1>
+            <p>Transform your space with AI-powered interior design</p>
+        </header>
+        
+        <div class="upload-section" id="uploadArea">
+            <div class="upload-icon">📁</div>
+            <h2>Upload an image</h2>
+            <p class="upload-text">Drag & drop or click to upload your image.<br>Allowed formats: PNG, JPEG, JPG (Max size: 25MB)</p>
+            <input type="file" id="fileInput" class="file-input" accept="image/png, image/jpeg, image/jpg">
+            <button class="upload-btn" id="uploadBtn">Select Image</button>
+            <p class="disclaimer">Our AI may not preserve watermarks on uploaded images. We recommend using images without watermarks.</p>
+            <p class="error-message" id="errorMessage"></p>
+        </div>
+        
+        <div class="loading" id="loadingIndicator">
+            <div class="spinner"></div>
+            <p>Generating design ideas... This may take a moment.</p>
+        </div>
+        
+        <div class="result-section" id="resultSection">
+            <h3 class="result-title">Your Design Suggestions</h3>
+            <div class="result-container">
+                <div class="result-column">
+                    <p class="result-label">Original Room</p>
+                    <img id="originalImage" class="result-img" src="" alt="Original room">
+                </div>
+                <div class="result-column">
+                    <p class="result-label">AI Redesign</p>
+                    <img id="generatedImage" class="result-img" src="" alt="AI redesigned room">
+                </div>
+            </div>
+        </div>
+        
+        <div class="photo-guide">
+            <h3 class="guide-title">Photo guide</h3>
+            <p>Try with a sample image</p>
+            
+            <div class="sample-images">
+                <div class="sample-card" onclick="useSampleImage('living-room')">
+                    <img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" class="sample-img" alt="Living room">
+                    <div class="sample-label">Virtual Staging</div>
+                </div>
+                <div class="sample-card" onclick="useSampleImage('bedroom')">
+                    <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" class="sample-img" alt="Bedroom">
+                    <div class="sample-label">Redesign Furnished Rooms</div>
+                </div>
+                <div class="sample-card" onclick="useSampleImage('garden')">
+                    <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" class="sample-img" alt="Garden">
+                    <div class="sample-label">Landscaping</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
-        const apiKey = '67e2d1123db0b9df7fe657f3'; // Replace with your API key
-        const createApiUrl = 'https://api.reimaginehome.ai/v1/create_mask';
-        const resultApiUrl = 'https://api.reimaginehome.ai/v1/generate_image';
+        // DOM Elements
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const resultSection = document.getElementById('resultSection');
+        const originalImage = document.getElementById('originalImage');
+        const generatedImage = document.getElementById('generatedImage');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        // API Configuration
+        const API_KEY = '67e79838d2f8895e8440ee24';
+        const API_BASE_URL = 'https://api.reimaginehome.ai/v1';
+        const CREATE_MASK_API = `${API_BASE_URL}/create_mask`;
+        const JOB_RESULT_API = `${API_BASE_URL}/job/result`;
         let jobId = null;
-        let pollCount = 0;
-        const maxPolls = 12; // Stop polling after 12 attempts (2 minutes)
-
-        async function startImageProcessing() {
-            const imageUrl = document.getElementById('imageUrlInput').value;
-            if (!imageUrl) {
-                alert("Please enter a valid image URL.");
+        let pollInterval = null;
+        const MAX_POLL_ATTEMPTS = 30; // 5 minutes with 10 second intervals
+        let pollAttempts = 0;
+        
+        // Event Listeners
+        uploadBtn.addEventListener('click', () => fileInput.click());
+        
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleImageUpload(e.target.files[0]);
+            }
+        });
+        
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('active');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('active');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('active');
+            
+            if (e.dataTransfer.files.length > 0) {
+                handleImageUpload(e.dataTransfer.files[0]);
+            }
+        });
+        
+        // Handle image upload
+        async function handleImageUpload(file) {
+            // Reset previous state
+            hideError();
+            resultSection.style.display = 'none';
+            
+            // Check file type
+            const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+            if (!validTypes.includes(file.type)) {
+                showError('Please upload a valid image file (JPEG, PNG, JPG)');
                 return;
             }
-            document.getElementById('output').textContent = "Processing...";
             
-            const requestBody = JSON.stringify({ "image_url": imageUrl });
+            // Check file size (25MB max)
+            if (file.size > 25 * 1024 * 1024) {
+                showError('File size exceeds 25MB limit');
+                return;
+            }
+            
+            // Display original image
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                originalImage.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
 
+            // Show loading indicator
+            loadingIndicator.style.display = 'block';
+            
             try {
-                const response = await fetch(createApiUrl, {
+                // Create FormData for the API request
+                const formData = new FormData();
+                formData.append('image', file);
+                
+                // Call the API to create mask and start processing
+                const response = await fetchWithTimeout(CREATE_MASK_API, {
                     method: 'POST',
                     headers: {
-                        'api-key': apiKey,
-                        'Content-Type': 'application/json'
+                        'api-key': API_KEY
                     },
-                    body: requestBody
+                    body: formData,
+                    timeout: 15000 // 15 seconds timeout
                 });
 
-                const responseData = await response.json();
-                console.log("Raw API Response:", responseData);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
                 
-                if (responseData.status === "success" && responseData.data?.job_id) {
-                    jobId = responseData.data.job_id;
-                    console.log("Received job ID:", jobId);
-                    pollCount = 0;
-                    checkForResult();
+                if (data.status === "success" && data.data?.job_id) {
+                    jobId = data.data.job_id;
+                    pollAttempts = 0;
+                    startPollingForResults();
                 } else {
-                    document.getElementById('output').textContent = "Error: No job ID received.";
+                    throw new Error(data.message || "No job ID received from API");
                 }
             } catch (error) {
-                document.getElementById('output').textContent = `Error: ${error.message}`;
+                loadingIndicator.style.display = 'none';
+                showError(`Failed to start processing: ${getErrorMessage(error)}`);
+                console.error("API Error:", error);
             }
         }
-
-        async function checkForResult() {
-            if (!jobId) return;
+        
+        // Fetch with timeout
+        async function fetchWithTimeout(resource, options = {}) {
+            const { timeout = 8000 } = options;
             
-            const pollInterval = setInterval(async () => {
-                if (pollCount >= maxPolls) {
+            const controller = new AbortController();
+            const id = setTimeout(() => controller.abort(), timeout);
+            
+            const response = await fetch(resource, {
+                ...options,
+                signal: controller.signal  
+            }).catch(error => {
+                if (error.name === 'AbortError') {
+                    throw new Error('Request timed out');
+                }
+                throw error;
+            });
+            
+            clearTimeout(id);
+            return response;
+        }
+
+        // Start polling for job results
+        function startPollingForResults() {
+            // Clear any existing polling
+            if (pollInterval) clearInterval(pollInterval);
+            
+            pollInterval = setInterval(async () => {
+                if (pollAttempts >= MAX_POLL_ATTEMPTS) {
                     clearInterval(pollInterval);
-                    document.getElementById('output').textContent = "Processing timed out. Try again later.";
+                    loadingIndicator.style.display = 'none';
+                    showError("Processing timed out. Please try again later.");
                     return;
                 }
                 
+                pollAttempts++;
+                
                 try {
-                    const requestUrl = `${resultApiUrl}/${jobId}`;
-                    console.log(`Fetching from: ${requestUrl}`);
-                    const response = await fetch(requestUrl, {
+                    const response = await fetchWithTimeout(`${JOB_RESULT_API}?job_id=${jobId}`, {
                         method: 'GET',
-                        headers: { 'api-key': apiKey }
+                        headers: {
+                            'api-key': API_KEY,
+                            'Content-Type': 'application/json'
+                        },
+                        timeout: 10000
                     });
                     
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+                    }
+
                     const data = await response.json();
-                    console.log("Polling Response:", data);
                     
-                    if (data.status === "success" && data.data?.job_status === "done" && data.data.generated_images?.length) {
-                        clearInterval(pollInterval);
-                        document.getElementById('output').innerHTML = data.data.generated_images.map(imgUrl => `<img src="${imgUrl}" alt="Generated Image">`).join('');
+                    if (data.status === "success") {
+                        if (data.data?.job_status === "done" && data.data.generated_images?.length) {
+                            // Processing complete
+                            clearInterval(pollInterval);
+                            loadingIndicator.style.display = 'none';
+                            generatedImage.src = data.data.generated_images[0];
+                            resultSection.style.display = 'block';
+                        } else if (data.data?.job_status === "failed") {
+                            clearInterval(pollInterval);
+                            loadingIndicator.style.display = 'none';
+                            showError("Image processing failed. Please try again with a different image.");
+                        }
                     } else {
-                        console.log("Job still processing...");
-                        pollCount++;
+                        throw new Error(data.message || "Unknown error occurred");
                     }
                 } catch (error) {
-                    clearInterval(pollInterval);
-                    document.getElementById('output').textContent = `Error: ${error.message}`;
+                    console.error("Polling error:", error);
+                    if (error.message.includes('timeout') || error.message.includes('Failed to fetch')) {
+                        // Network issues - continue polling
+                    } else {
+                        clearInterval(pollInterval);
+                        loadingIndicator.style.display = 'none';
+                        showError(`Error checking status: ${getErrorMessage(error)}`);
+                    }
                 }
-            }, 10000); // Check every 10 seconds
+            }, 10000); // Poll every 10 seconds
+        }
+
+        // Sample image handler
+        function useSampleImage(type) {
+            let sampleUrl = '';
+            let sampleName = '';
+            
+            switch(type) {
+                case 'living-room':
+                    sampleUrl = 'https://images.unsplash.com/photo-1556911220-bff31c812dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80';
+                    sampleName = 'living-room.jpg';
+                    break;
+                case 'bedroom':
+                    sampleUrl = 'https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80';
+                    sampleName = 'bedroom.jpg';
+                    break;
+                case 'garden':
+                    sampleUrl = 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80';
+                    sampleName = 'garden.jpg';
+                    break;
+            }
+            
+            // Show loading indicator
+            loadingIndicator.style.display = 'block';
+            resultSection.style.display = 'none';
+            hideError();
+            
+            // For sample images, we need to download them first to create a File object
+            fetch(sampleUrl)
+                .then(response => response.blob())
+                .then(blob => {
+                    const file = new File([blob], sampleName, { type: blob.type });
+                    handleImageUpload(file);
+                })
+                .catch(error => {
+                    loadingIndicator.style.display = 'none';
+                    showError(`Failed to load sample image: ${error.message}`);
+                });
+        }
+
+        // Helper functions
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+        
+        function hideError() {
+            errorMessage.style.display = 'none';
+        }
+        
+        function getErrorMessage(error) {
+            if (error.name === 'AbortError') {
+                return 'Request timed out';
+            } else if (error.message.includes('Failed to fetch')) {
+                return 'Network error - please check your connection';
+            } else if (error.message.includes('CORS')) {
+                return 'Cross-origin request blocked - contact support';
+            }
+            return error.message || 'Unknown error occurred';
         }
     </script>
 </body>
 </html>
+
+

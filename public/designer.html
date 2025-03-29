@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hire Interior Designers | Decor-Deck</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Navbar styles from first code */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--bg-color);
+            box-shadow: 0 1px 4px hsl(0 4% 15% / 10%);
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            transition: 0.5s;
+            background-color: white;
+        }
+
+        .logo {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            margin-right: 5px;
+        }
+
+        .logo span {
+            color: #83b735;
+        }
+
+        .navbar {
+            display: flex;
+            column-gap: 2rem;
+            align-items: center;
+        }
+
+        .navbar li {
+            position: relative;
+            list-style: none;
+        }
+
+        .navbar a {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            color: #83b735;
+        }
+
+        .auth {
+            display: flex;
+            align-items: center;
+            column-gap: 1rem;
+        }
+
+        .nav-cart {
+            font-size: 1.5rem;
+            color: var(--text-color);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .nav-cart:hover {
+            color: #83b735;
+        }
+
+        .nav-cart[data-quantity]:after {
+            content: attr(data-quantity);
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            width: 18px;
+            height: 18px;
+            background: var(--main-color);
+            border-radius: 50%;
+            color: white;
+            font-size: 11px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-profile-login {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        #menu-icon {
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10001;
+            display: none;
+        }
+
+        .sub-wrap {
+            position: absolute;
+            top: 100%;
+            right: 2%;
+            width: 320px;
+            max-height: 0px;
+            overflow: hidden;
+            transition: max-height 0.5s;
+        }
+
+        .sub-wrap.open-menu {
+            max-height: 400px;
+        }
+
+        .submenu {
+            background: white;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .sub-menu-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #525252;
+            margin: 12px 0;
+        }
+
+        .sub-menu-link p {
+            width: 100%;
+        }
+
+        .sub-menu-link span {
+            font-size: 22px;
+            transition: transform 0.5s;
+        }
+
+        .sub-menu-link:hover span {
+            transform: translateX(5px);
+        }
+
+        .sub-menu-link:hover p {
+            font-weight: 600;
+        }
+
+        .info-user {
+            display: flex;
+            align-items: center;
+        }
+
+        .info-user h4 {
+            font-weight: 500;
+            margin-left: 10px;
+        }
+
+        .info-user img {
+            width: 60px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        /* Cart styles from first code */
+        .cart {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 360px;
+            min-height: 100vh;
+            padding: 20px;
+            background: white;
+            box-shadow: -2px 0 4px hsl(0 4% 15% / 10%);
+            transition: 0.3s;
+            z-index: 1000;
+        }
+
+        .cart.active {
+            right: 0;
+        }
+
+        .cart-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2rem;
+        }
+
+        .cart-content {
+            margin-top: 1rem;
+        }
+
+        .cart-box {
+            display: grid;
+            grid-template-columns: 32% 50% 18%;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .cart-img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            padding: 10px;
+        }
+
+        .detail-box {
+            display: grid;
+            row-gap: 0.5rem;
+        }
+
+        .cart-product-title {
+            font-size: 1rem;
+            text-transform: uppercase;
+        }
+
+        .cart-price {
+            font-weight: 500;
+        }
+
+        .cart-quantity {
+            border: 1px solid var(--text-color);
+            outline-color: var(--main-color);
+            width: 2.4rem;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .cart-remove {
+            font-size: 24px;
+            color: var(--main-color);
+            cursor: pointer;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+            border-top: 1px solid var(--text-color);
+        }
+
+        .cart-total-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .totalprice {
+            margin-left: 0.5rem;
+        }
+
+        .cart-btn {
+            display: flex;
+            margin: 1.5rem auto 0 auto;
+            padding: 12px 20px;
+            border: none;
+            background: #83b735;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .cart-btn:hover {
+            background: #5a8f22;
+        }
+
+        #close-cart {
+            position: absolute;
+            top: 1rem;
+            right: 0.8rem;
+            font-size: 2rem;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        #close-cart:hover {
+            color: var(--main-color);
+        }
+
+        /* Rest of your existing styles */
+        :root {
+            --primary-green: #83b735;
+            --dark-green: #5a8f22;
+            --light-gray: #f5f5f5;
+            --dark-gray: #333333;
+            --white: #ffffff;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--dark-gray);
+            background-color: var(--white);
+            padding-top: 70px; /* Added to account for fixed navbar */
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), 
+                        url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace') center/cover;
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-gray);
+            margin-bottom: 20px;
+        }
+        
+        .hero-title span {
+            color: var(--primary-green);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-green);
+            border-color: var(--primary-green);
+            padding: 10px 25px;
+            font-weight: 500;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--dark-green);
+            border-color: var(--dark-green);
+        }
+        
+        .designers-section {
+            padding: 80px 0;
+            background-color: var(--light-gray);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--dark-gray);
+        }
+        
+        .section-title p {
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .designer-card {
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+        
+        .designer-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .designer-img {
+            height: 250px;
+            object-fit: cover;
+            width: 100%;
+        }
+        
+        .designer-info {
+            padding: 20px;
+        }
+        
+        .designer-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark-gray);
+        }
+        
+        .designer-specialty {
+            color: var(--primary-green);
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .designer-rate {
+            color: var(--dark-gray);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .designer-bio {
+            margin-bottom: 20px;
+            color: #666;
+        }
+        
+        .rating {
+            color: #ffc107;
+            margin-bottom: 15px;
+        }
+        
+        .contact-form-section {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+        
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .form-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--dark-gray);
+        }
+        
+        .form-control {
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 0.25rem rgba(131, 183, 53, 0.25);
+        }
+        
+        .chatbot-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            /* Mobile navbar styles */
+            #menu-icon {
+                display: block;
+            }
+            
+            .navbar {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                row-gap: 0.5rem;
+                padding: 20px 0;
+                box-shadow: 0 20px 15px rgba(0, 0, 0, 0.1);
+                clip-path: circle(0% at 100% 0%);
+                transition: 0.6s;
+            }
+            
+            .navbar.active {
+                clip-path: circle(144% at 100% 0%);
+            }
+            
+            .navbar li {
+                display: block;
+                margin: 1rem 0;
+            }
+        }
+    </style>
+</head>
+<body class="prevent-select">
+    <!-- Navigation -->
+    <header>
+        <p href="#" class="logo"><img src="./img/Final-logo.png" alt="logo" width="40px">Decor<span>Deck</span></p>
+
+        <ul class="navbar">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="#blog">Blog</a></li>
+            <li><a href="#aug">Try Augmented</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="designer.html" style="color: #83b735;">Hire Designer</a></li>
+        </ul>
+        <ul class="auth">
+            <li><a href="#"><i class='bx bxs-shopping-bag-alt' id="nav-cart" data-quantity="0"></i></a></li>
+            <div class="bx bx-menu" id="menu-icon"></div>
+            <img src="./img/default-profile.png" alt="profile" class="nav-profile-login" id="main-profile-img"
+                onclick="toggleprofile()">
+            <div class="sub-wrap" id="subwrap">
+                <div class="submenu">
+                    <div class="info-user">
+                        <img src="" alt="" id="profile-img">
+                        <h4 id="profile-name"></h4>
+                    </div>
+                    <hr>
+                    <a href="#" class="sub-menu-link" id="profile-editprofile">
+                        <i class='bx bxs-cog'></i>
+                        <p>Edit-profile</p>
+                        <span>></span>
+                    </a>
+                    <a href="https://mail.google.com/mail/u/0/#inbox?compose=sJwlqMmsSFfDdGrrSxpwhmGBwgrvxjQhzbVvLjWQJbclfJwMdhwKhsWfRcncghBjqcCJVrjZGxjHHFbzrdMgRwzbtqhShKzccKBnpNrChGBNqHfXkxwTnTbmldTGPlhNPmCxDCnTzKmGBwXMDhGgnLGKwWgvrHtjb" class="sub-menu-link">
+                        <i class='bx bx-support'></i>
+                        <p>Help-Support</p>
+                        <span>></span>
+                    </a>
+                    <a href="#" class="sub-menu-link" id="profile-logout" onclick="profilelogout()">
+                        <i class='bx bx-log-out'></i>
+                        <p>Log-out</p>
+                        <span>></span>
+                    </a>
+                    <a href="#" class="sub-menu-link" id="profile-login" onclick="profilelogin()">
+                        <i class='bx bx-log-in'></i>
+                        <p>Sign-up</p>
+                        <span>></span>
+                    </a>
+                </div>
+            </div>
+        </ul>
+        
+        <!-- Cart -->
+        <div class="cart">
+            <h2 class="cart-title">Your Cart</h2>
+            <div class="cart-content">
+            </div>
+            <div class="cart-total">
+                <div class="cart-total-title">Total </div>
+                <div class="totalprice"> Rs.0</div>
+            </div>
+            <div id="note">     
+                <br><br>           
+                <b>Note:-</b>Please Login before Checkout
+            </div>
+            <button type="button" class="cart-btn" id="cartbtn">Buy Now</button>
+            <ion-icon name="arrow-forward-circle" id="close-cart"></ion-icon>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">Hire Expert <span>Interior Designers</span></h1>
+            <p class="hero-subtitle">Transform your space with our professional interior design services. From concept to completion, we bring your vision to life.</p>
+            <a href="#designers" class="btn btn-primary">Browse Designers</a>
+        </div>
+    </section>
+
+    <!-- Designers Section -->
+    <section class="designers-section" id="designers">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Top Designers</h2>
+                <p>Each designer brings unique expertise and style to create spaces that reflect your personality and lifestyle.</p>
+            </div>
+            
+            <div class="row">
+                <!-- Designer 1 -->
+                <div class="col-md-4">
+                    <div class="designer-card">
+                        <img src="https://images.unsplash.com/photo-1593104547489-5cfb3839a3b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" class="designer-img" alt="Priya Sharma">
+                        <div class="designer-info">
+                            <h3 class="designer-name">Priya Sharma</h3>
+                            <div class="designer-specialty">Traditional Indian & Contemporary Fusion</div>
+                            <div class="designer-rate">₹150-200/sq.ft</div>
+                            <div class="rating">
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star-half'></i>
+                                (63 reviews)
+                            </div>
+                            <p class="designer-bio">Blending traditional Indian aesthetics with modern functionality. Specializes in space-efficient urban homes with cultural elements.</p>
+                            <a href="#contact" class="btn btn-primary w-100">Hire Priya</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Designer 2 -->
+                <div class="col-md-4">
+                    <div class="designer-card">
+                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" class="designer-img" alt="Rahul Kapoor">
+                        <div class="designer-info">
+                            <h3 class="designer-name">Rahul Kapoor</h3>
+                            <div class="designer-specialty">Luxury Residential & Commercial</div>
+                            <div class="designer-rate">₹250-350/sq.ft</div>
+                            <div class="rating">
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                (42 reviews)
+                            </div>
+                            <p class="designer-bio">Creating opulent spaces with premium materials and bespoke furnishings. 12+ years experience in high-end residential projects.</p>
+                            <a href="#contact" class="btn btn-primary w-100">Hire Rahul</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Designer 3 -->
+                <div class="col-md-4">
+                    <div class="designer-card">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" class="designer-img" alt="Neha Patel">
+                        <div class="designer-info">
+                            <h3 class="designer-name">Neha Patel</h3>
+                            <div class="designer-specialty">Sustainable & Budget-Friendly</div>
+                            <div class="designer-rate">₹80-120/sq.ft</div>
+                            <div class="rating">
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bx-star'></i>
+                                (37 reviews)
+                            </div>
+                            <p class="designer-bio">Eco-conscious designs that don't compromise on style. Specializes in affordable solutions using local materials and crafts.</p>
+                            <a href="#contact" class="btn btn-primary w-100">Hire Neha</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Designer 4 -->
+                <div class="col-md-4">
+                    <div class="designer-card">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" class="designer-img" alt="Arjun Mehta">
+                        <div class="designer-info">
+                            <h3 class="designer-name">Arjun Mehta</h3>
+                            <div class="designer-specialty">Modern Minimalist</div>
+                            <div class="designer-rate">₹180-250/sq.ft</div>
+                            <div class="rating">
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star-half'></i>
+                                (51 reviews)
+                            </div>
+                            <p class="designer-bio">Clean lines, functional spaces, and clutter-free aesthetics. Perfect for urban professionals seeking sophisticated simplicity.</p>
+                            <a href="#contact" class="btn btn-primary w-100">Hire Arjun</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Designer 5 -->
+                <div class="col-md-4">
+                    <div class="designer-card">
+                        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" class="designer-img" alt="Ananya Reddy">
+                        <div class="designer-info">
+                            <h3 class="designer-name">Ananya Reddy</h3>
+                            <div class="designer-specialty">South Indian Traditional</div>
+                            <div class="designer-rate">₹120-180/sq.ft</div>
+                            <div class="rating">
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bx-star'></i>
+                                (29 reviews)
+                            </div>
+                            <p class="designer-bio">Expert in traditional South Indian designs with teak wood furniture, kolam patterns, and vibrant color palettes.</p>
+                            <a href="#contact" class="btn btn-primary w-100">Hire Ananya</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Designer 6 -->
+                <div class="col-md-4">
+                    <div class="designer-card">
+                        <img src="https://images.unsplash.com/photo-1583864697784-a0efc8379f70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" class="designer-img" alt="Vikram Singh">
+                        <div class="designer-info">
+                            <h3 class="designer-name">Vikram Singh</h3>
+                            <div class="designer-specialty">Industrial & Loft Style</div>
+                            <div class="designer-rate">₹200-300/sq.ft</div>
+                            <div class="rating">
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                <i class='bx bxs-star'></i>
+                                (35 reviews)
+                            </div>
+                            <p class="designer-bio">Raw materials, exposed structures, and urban edge. Perfect for converting old spaces into modern industrial masterpieces.</p>
+                            <a href="#contact" class="btn btn-primary w-100">Hire Vikram</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="contact-form-section" id="contact">
+        <div class="container">
+            <div class="form-container">
+                <h2 class="form-title">Contact a Designer</h2>
+                <form id="designerContactForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="name" placeholder="Full Name" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <input type="email" class="form-control" id="email" placeholder="Email Address" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <input type="tel" class="form-control" id="phone" placeholder="Phone Number" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <select class="form-control" id="designer" required>
+                                    <option value="">Select Designer</option>
+                                    <option value="Priya Sharma">Priya Sharma (₹150-200/sq.ft)</option>
+                                    <option value="Rahul Kapoor">Rahul Kapoor (₹250-350/sq.ft)</option>
+                                    <option value="Neha Patel">Neha Patel (₹80-120/sq.ft)</option>
+                                    <option value="Arjun Mehta">Arjun Mehta (₹180-250/sq.ft)</option>
+                                    <option value="Ananya Reddy">Ananya Reddy (₹120-180/sq.ft)</option>
+                                    <option value="Vikram Singh">Vikram Singh (₹200-300/sq.ft)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <textarea class="form-control" id="projectDetails" rows="5" placeholder="Tell us about your project (size, budget, style preferences)..." required></textarea>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="consent" required>
+                        <label class="form-check-label" for="consent">I agree to the terms and privacy policy</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Submit Request</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chatbot Toggle -->
+    <button class="chatbot-toggle" id="chatbotToggle">
+        <i class='bx bx-chat'></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script>
+        // Form submission handling
+        document.getElementById('designerContactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const designer = document.getElementById('designer').value;
+            const projectDetails = document.getElementById('projectDetails').value;
+            
+            // Here you would typically send this data to your server
+            console.log('Form submitted:', { name, email, phone, designer, projectDetails });
+            
+            // Show success message
+            alert(`Thank you, ${name}! Your request to work with ${designer} has been submitted. We'll contact you shortly.`);
+            
+            // Reset form
+            this.reset();
+        });
+        
+        // Chatbot toggle functionality
+        document.getElementById('chatbotToggle').addEventListener('click', function() {
+            // This would open your chatbot interface
+            alert('Chatbot feature will open here. Connect to your existing chatbot implementation.');
+        });
+        
+        // Navbar toggle functionality
+        let menuIcon = document.querySelector('#menu-icon');
+        let navbar = document.querySelector('.navbar');
+        
+        menuIcon.onclick = () => {
+            menuIcon.classList.toggle('bx-x');
+            navbar.classList.toggle('active');
+        }
+        
+        // Profile toggle functionality
+        function toggleprofile() {
+            document.getElementById("subwrap").classList.toggle("open-menu");
+        }
+        
+        // Close navbar when clicking on a link
+        document.querySelectorAll('.navbar a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuIcon.classList.remove('bx-x');
+                navbar.classList.remove('active');
+            });
+        });
+        
+        // Cart functionality
+        let cartIcon = document.querySelector('#nav-cart');
+        let cart = document.querySelector('.cart');
+        let closeCart = document.querySelector('#close-cart');
+        
+        cartIcon.onclick = () => {
+            cart.classList.add('active');
+        }
+        
+        closeCart.onclick = () => {
+            cart.classList.remove('active');
+        }
+    </script>
+</body>
+</html>
