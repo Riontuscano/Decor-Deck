@@ -32,7 +32,7 @@
             padding: 2rem;
         }
 
-        h1 {
+        h1, h2 {
             color: var(--primary-color);
             text-align: center;
             margin-bottom: 1rem;
@@ -123,15 +123,45 @@
             border: 2px solid var(--primary-color);
         }
 
+        .pricing-container {
+            margin-top: 4rem;
+        }
+
+        .pricing-container h2 {
+            text-align: center;
+        }
+
+        .pricing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+
+        .pricing-table th, .pricing-table td {
+            padding: 1rem;
+            border: 1px solid var(--light-gray);
+            text-align: left;
+        }
+
+        .pricing-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
         @media (max-width: 768px) {
             .plans-container {
                 flex-direction: column;
                 align-items: center;
             }
-            
+
             .plan-card {
                 width: 100%;
                 max-width: 350px;
+            }
+
+            .pricing-table th, .pricing-table td {
+                padding: 0.75rem;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -143,40 +173,40 @@
         <p style="text-align: center; margin-bottom: 2rem;">Select a one-time plan to unlock premium AI interior design features</p>
 
         <div class="plans-container">
-            <!-- Basic Plan -->
             <div class="plan-card" id="basic-plan">
                 <h3 class="plan-name">Basic</h3>
-                <div class="plan-price">₹500</div>
+                <div class="plan-price">₹499</div>
                 <ul class="plan-features">
-                    <li>5 AI-generated room designs</li>
+                    <li>Single Room Design</li>
+                    <li>10 AI-generated room designs</li>
                     <li>Standard quality renders</li>
                     <li>Basic furniture suggestions</li>
                     <li>Email support</li>
-                    <li>Valid for 30 days</li>
+
                 </ul>
                 <button class="select-btn" onclick="selectPlan('basic')">Select Plan</button>
             </div>
 
-            <!-- Standard Plan -->
             <div class="plan-card" id="standard-plan">
                 <h3 class="plan-name">Standard</h3>
-                <div class="plan-price">₹1200</div>
+                <div class="plan-price">₹1,999</div>
                 <ul class="plan-features">
-                    <li>15 AI-generated room designs</li>
+                    <li>Up to 3 Room Designs</li>
+                    <li>30 AI-generated room designs</li>
                     <li>High quality renders</li>
                     <li>Premium furniture suggestions</li>
                     <li>Priority email support</li>
-                    <li>Valid for 60 days</li>
+
                 </ul>
                 <button class="select-btn" onclick="selectPlan('standard')">Select Plan</button>
             </div>
 
-            <!-- Premium Plan -->
             <div class="plan-card" id="premium-plan">
                 <h3 class="plan-name">Premium</h3>
-                <div class="plan-price">₹2500</div>
+                <div class="plan-price">₹3,999</div>
                 <ul class="plan-features">
-                    <li>Unlimited AI-generated designs</li>
+                    <li>Unlimited Room Designs</li>
+                    <!-- <li>Unlimited AI-generated designs</li> -->
                     <li>Ultra HD quality renders</li>
                     <li>Custom furniture recommendations</li>
                     <li>24/7 priority support</li>
@@ -186,25 +216,15 @@
                 <button class="select-btn" onclick="selectPlan('premium')">Select Plan</button>
             </div>
         </div>
+
     </div>
 
     <script>
         function selectPlan(plan) {
-            // Remove selected class from all cards
-            document.querySelectorAll('.plan-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-            
-            // Add selected class to chosen plan
+            document.querySelectorAll('.plan-card').forEach(card => card.classList.remove('selected'));
             document.getElementById(`${plan}-plan`).classList.add('selected');
-            
-            // In a real implementation, you would proceed to payment here
             alert(`You've selected the ${plan} plan. Redirecting to payment...`);
-            
-            // Simulate payment redirection
-            setTimeout(() => {
-                window.location.href = 'payment.html'; // You would create this page
-            }, 1500);
+            setTimeout(() => window.location.href = 'payment.html', 1500);
         }
     </script>
 </body>

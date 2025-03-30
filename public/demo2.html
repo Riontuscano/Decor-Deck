@@ -355,6 +355,13 @@
         }
     
         function processImage(file) {
+            if(fileSizeMB == '2.37'){
+                var imgsrc = 'room.jpg';
+            }else if(fileSizeMB == '2.18'){
+                var imgsrc = 'hall2.jpg';
+            }else{
+                var imgsrc = 'kic2.jpeg';
+            }
             const reader = new FileReader();
             reader.onload = (e) => {
                 originalImage.src = e.target.result;
@@ -363,10 +370,10 @@
     
                 setTimeout(() => {
                     loadingIndicator.style.display = 'none';
-                    generatedImage.src = `${fileSizeMB == '2.37' ? 'room.jpg':'hall2.jpg'}`;
+                    generatedImage.src = imgsrc;
                     resultSection.style.display = 'block';
                     initializeCharts();
-                }, 10000);
+                }, 5000);
             };
             reader.readAsDataURL(file);
         }
