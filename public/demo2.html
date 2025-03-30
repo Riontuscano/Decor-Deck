@@ -306,6 +306,7 @@
             </div>
         </div>
     </div>
+    
 
     <script>
         const uploadBtn = document.getElementById('uploadBtn');
@@ -314,118 +315,140 @@
         const resultSection = document.getElementById('resultSection');
         const originalImage = document.getElementById('originalImage');
         const generatedImage = document.getElementById('generatedImage');
-
+        let fileSizeMB = '';
         uploadBtn.addEventListener('click', () => fileInput.click());
-
+    
         fileInput.addEventListener('change', (e) => {
             if (e.target.files.length > 0) {
-                processImage(e.target.files[0]);
+                validateImage(e.target.files[0]);
             }
         });
-
-        function processImage(file) {
+    
+        function validateImage(file) {
             if (!['image/jpeg', 'image/png', 'image/jpg'].includes(file.type)) {
-                alert('Please upload a valid image file.');
+                alert('Please upload a valid image file (JPG, PNG).');
                 return;
             }
+    
+             fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
             if (file.size > 25 * 1024 * 1024) {
-                alert('File size exceeds 25MB.');
+                alert(`File size exceeds 25MB (Your file:${fileSizeMB}MB). Please upload a smaller image.`);
                 return;
             }
-
+    
+            const img = new Image();
+            img.src = URL.createObjectURL(file);
+            img.onload = function () {
+                const width = img.naturalWidth;
+                const height = img.naturalHeight;
+    
+                // console.log(`Image Dimensions: ${width} x ${height}px`);
+                console.log(`File Size: ${fileSizeMB}MB`);
+    
+                if (width > 5000 || height > 5000) {
+                    alert(`Image resolution too high (${width}x${height}px). Please upload a smaller image.`);
+                    return;
+                }
+    
+                processImage(file); // Process only if valid
+            };
+        }
+    
+        function processImage(file) {
             const reader = new FileReader();
             reader.onload = (e) => {
                 originalImage.src = e.target.result;
                 loadingIndicator.style.display = 'block';
                 resultSection.style.display = 'none';
-
+    
                 setTimeout(() => {
                     loadingIndicator.style.display = 'none';
-                    generatedImage.src = 'room.jpg';
+                    generatedImage.src = `${fileSizeMB == '2.37' ? 'room.jpg':'hall2.jpg'}`;
                     resultSection.style.display = 'block';
                     initializeCharts();
-                }, 3000);
+                }, 10000);
             };
             reader.readAsDataURL(file);
         }
-
+    
         function initializeCharts() {
-    // Ensure previous charts exist before destroying
-    if (window.costChart && typeof window.costChart.destroy === "function") {
-        window.costChart.destroy();
-    }
-    if (window.timeChart && typeof window.timeChart.destroy === "function") {
-        window.timeChart.destroy();
-    }
-
-    // Cost Comparison Chart
-    const costCtx = document.getElementById('costChart').getContext('2d');
-    window.costChart = new Chart(costCtx, {
-        type: 'bar',
-        data: {
-            labels: ['Basic', 'Standard', 'Premium'],
-            datasets: [
-                {
-                    label: 'Traditional Designer (₹)',
-                    data: [15000, 35000, 75000],
-                    backgroundColor: '#6c757d'
+            // Ensure previous charts exist before destroying
+            if (window.costChart && typeof window.costChart.destroy === "function") {
+                window.costChart.destroy();
+            }
+            if (window.timeChart && typeof window.timeChart.destroy === "function") {
+                window.timeChart.destroy();
+            }
+    
+            // Cost Comparison Chart
+            const costCtx = document.getElementById('costChart').getContext('2d');
+            window.costChart = new Chart(costCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Basic', 'Standard', 'Premium'],
+                    datasets: [
+                        {
+                            label: 'Traditional Designer (₹)',
+                            data: [15000, 35000, 75000],
+                            backgroundColor: '#6c757d'
+                        },
+                        {
+                            label: 'AI Designer (₹)',
+                            data: [500, 1200, 2500],
+                            backgroundColor: '#28a745'
+                        }
+                    ]
                 },
-                {
-                    label: 'AI Designer (₹)',
-                    data: [500, 1200, 2500],
-                    backgroundColor: '#28a745'
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Cost in ₹'
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Cost in ₹'
+                            }
+                        }
                     }
                 }
-            }
-        }
-    });
-
-    // Time Savings Chart
-    const timeCtx = document.getElementById('timeChart').getContext('2d');
-    window.timeChart = new Chart(timeCtx, {
-        type: 'bar',
-        data: {
-            labels: ['Initial Design', 'Revisions', 'Final Delivery'],
-            datasets: [
-                {
-                    label: 'Traditional (Days)',
-                    data: [14, 7, 3],
-                    backgroundColor: '#6c757d'
+            });
+    
+            // Time Savings Chart
+            const timeCtx = document.getElementById('timeChart').getContext('2d');
+            window.timeChart = new Chart(timeCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Initial Design', 'Revisions', 'Final Delivery'],
+                    datasets: [
+                        {
+                            label: 'Traditional (Days)',
+                            data: [14, 7, 3],
+                            backgroundColor: '#6c757d'
+                        },
+                        {
+                            label: 'AI (Hours)',
+                            data: [0.5, 0.2, 0.1],
+                            backgroundColor: '#28a745'
+                        }
+                    ]
                 },
-                {
-                    label: 'AI (Hours)',
-                    data: [0.5, 0.2, 0.1],
-                    backgroundColor: '#28a745'
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Time'
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Time'
+                            }
+                        }
                     }
                 }
-            }
+            });
         }
-    });
-}
- </script>
+    </script>
+    
 </body>
 </html>
