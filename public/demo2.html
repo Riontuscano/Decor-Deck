@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decor Deck - AI Room Design</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #28a745;
+            --secondary-color: #ffffff;
+            --text-color: #333;
+            --light-gray: #e9ecef;
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            position: relative;
+            padding-top: 20px;
+        }
+
+        .back-home-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-home-btn:hover {
+            background-color: #218838;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        h1, h2, h3 {
+            color: var(--primary-color);
+        }
+
+        .upload-section {
+            border: 2px dashed var(--light-gray);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+        }
+
+        .upload-section:hover {
+            border-color: var(--primary-color);
+        }
+
+        .upload-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .loading {
+            display: none;
+            margin: 2rem 0;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .result-section {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .result-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .result-column {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .result-img {
+            max-width: 100%;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .action-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+        }
+
+        .primary-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .secondary-btn {
+            background-color: var(--light-gray);
+            color: var(--text-color);
+            border: 1px solid #ddd;
+        }
+
+        .comparison-section {
+            background-color: #f8f9fa;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-top: 2rem;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            min-width: 200px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .chart-container {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .chart-wrapper {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .chart-box {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        .benefits-list {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+            text-align: left;
+        }
+
+        @media (max-width: 768px) {
+            .result-container, .action-buttons {
+                flex-direction: column;
+            }
+            
+            .back-home-btn {
+                position: static;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-home-btn">← Back to Home</a>
+
+    <div class="container">
+        <h1>Decor Deck</h1>
+        <p>Transform your space with AI-powered interior design</p>
+        
+        <div class="upload-section">
+            <h2>Upload an Image</h2>
+            <p>Allowed formats: PNG, JPEG, JPG (Max size: 25MB)</p>
+            <input type="file" id="fileInput" accept="image/png, image/jpeg, image/jpg" style="display:none;">
+            <button class="upload-btn" id="uploadBtn">Select Image</button>
+        </div>
+
+        <div class="loading" id="loadingIndicator">
+            <div class="spinner"></div>
+            <p>Generating design ideas... Please wait.</p>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <h2>Your Design Suggestions</h2>
+            <div class="result-container">
+                <div class="result-column">
+                    <h3>Original Room</h3>
+                    <img id="originalImage" class="result-img" src="" alt="Original room">
+                </div>
+                <div class="result-column">
+                    <h3>AI Redesign</h3>
+                    <img id="generatedImage" class="result-img" src="" alt="AI redesigned room">
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="shop.html" class="action-btn primary-btn">Buy Furniture Now</a>
+                <a href="subscription.html" class="action-btn secondary-btn">Try Another Design</a>
+            </div>
+            
+            <div class="comparison-section">
+                <h2>Why Choose AI Interior Design?</h2>
+                <p>See how AI-powered design outperforms traditional methods</p>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-value">10x</div>
+                        <p>Faster than traditional designers</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">1/10</div>
+                        <p>The cost of human designers</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">24/7</div>
+                        <p>Availability</p>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-wrapper">
+                        <h3>Cost Comparison</h3>
+                        <div class="chart-box">
+                            <canvas id="costChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <h3>Time Savings</h3>
+                        <div class="chart-box">
+                            <canvas id="timeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="benefits-list">
+                    <h3>Key Benefits:</h3>
+                    <ul>
+                        <li>Get design concepts in minutes instead of weeks</li>
+                        <li>Save thousands compared to traditional designers</li>
+                        <li>Make unlimited revisions at no extra cost</li>
+                        <li>Access data-driven style recommendations</li>
+                        <li>Available anytime, anywhere</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const uploadBtn = document.getElementById('uploadBtn');
+        const fileInput = document.getElementById('fileInput');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const resultSection = document.getElementById('resultSection');
+        const originalImage = document.getElementById('originalImage');
+        const generatedImage = document.getElementById('generatedImage');
+
+        uploadBtn.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                processImage(e.target.files[0]);
+            }
+        });
+
+        function processImage(file) {
+            if (!['image/jpeg', 'image/png', 'image/jpg'].includes(file.type)) {
+                alert('Please upload a valid image file.');
+                return;
+            }
+            if (file.size > 25 * 1024 * 1024) {
+                alert('File size exceeds 25MB.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                originalImage.src = e.target.result;
+                loadingIndicator.style.display = 'block';
+                resultSection.style.display = 'none';
+
+                setTimeout(() => {
+                    loadingIndicator.style.display = 'none';
+                    generatedImage.src = 'room.jpg';
+                    resultSection.style.display = 'block';
+                    initializeCharts();
+                }, 3000);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function initializeCharts() {
+    // Ensure previous charts exist before destroying
+    if (window.costChart && typeof window.costChart.destroy === "function") {
+        window.costChart.destroy();
+    }
+    if (window.timeChart && typeof window.timeChart.destroy === "function") {
+        window.timeChart.destroy();
+    }
+
+    // Cost Comparison Chart
+    const costCtx = document.getElementById('costChart').getContext('2d');
+    window.costChart = new Chart(costCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Basic', 'Standard', 'Premium'],
+            datasets: [
+                {
+                    label: 'Traditional Designer (₹)',
+                    data: [15000, 35000, 75000],
+                    backgroundColor: '#6c757d'
+                },
+                {
+                    label: 'AI Designer (₹)',
+                    data: [500, 1200, 2500],
+                    backgroundColor: '#28a745'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Cost in ₹'
+                    }
+                }
+            }
+        }
+    });
+
+    // Time Savings Chart
+    const timeCtx = document.getElementById('timeChart').getContext('2d');
+    window.timeChart = new Chart(timeCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Initial Design', 'Revisions', 'Final Delivery'],
+            datasets: [
+                {
+                    label: 'Traditional (Days)',
+                    data: [14, 7, 3],
+                    backgroundColor: '#6c757d'
+                },
+                {
+                    label: 'AI (Hours)',
+                    data: [0.5, 0.2, 0.1],
+                    backgroundColor: '#28a745'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Time'
+                    }
+                }
+            }
+        }
+    });
+}
+ </script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decor Deck - Subscription Plans</title>
+    <style>
+        :root {
+            --primary-color: #28a745;
+            --secondary-color: #ffffff;
+            --text-color: #333;
+            --light-gray: #e9ecef;
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .back-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            transition: background-color 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: #218838;
+        }
+
+        .plans-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .plan-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 300px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .plan-price {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .plan-features li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+
+        .select-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .select-btn:hover {
+            background-color: #218838;
+        }
+
+        .selected {
+            border: 2px solid var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .plans-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .plan-card {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="back-btn" onclick="window.history.back()">← Back</button>
+        <h1>Choose Your AI Design Subscription</h1>
+        <p style="text-align: center; margin-bottom: 2rem;">Select a one-time plan to unlock premium AI interior design features</p>
+
+        <div class="plans-container">
+            <!-- Basic Plan -->
+            <div class="plan-card" id="basic-plan">
+                <h3 class="plan-name">Basic</h3>
+                <div class="plan-price">₹500</div>
+                <ul class="plan-features">
+                    <li>5 AI-generated room designs</li>
+                    <li>Standard quality renders</li>
+                    <li>Basic furniture suggestions</li>
+                    <li>Email support</li>
+                    <li>Valid for 30 days</li>
+                </ul>
+                <button class="select-btn" onclick="selectPlan('basic')">Select Plan</button>
+            </div>
+
+            <!-- Standard Plan -->
+            <div class="plan-card" id="standard-plan">
+                <h3 class="plan-name">Standard</h3>
+                <div class="plan-price">₹1200</div>
+                <ul class="plan-features">
+                    <li>15 AI-generated room designs</li>
+                    <li>High quality renders</li>
+                    <li>Premium furniture suggestions</li>
+                    <li>Priority email support</li>
+                    <li>Valid for 60 days</li>
+                </ul>
+                <button class="select-btn" onclick="selectPlan('standard')">Select Plan</button>
+            </div>
+
+            <!-- Premium Plan -->
+            <div class="plan-card" id="premium-plan">
+                <h3 class="plan-name">Premium</h3>
+                <div class="plan-price">₹2500</div>
+                <ul class="plan-features">
+                    <li>Unlimited AI-generated designs</li>
+                    <li>Ultra HD quality renders</li>
+                    <li>Custom furniture recommendations</li>
+                    <li>24/7 priority support</li>
+                    <li>Valid for 90 days</li>
+                    <li>Exclusive design styles</li>
+                </ul>
+                <button class="select-btn" onclick="selectPlan('premium')">Select Plan</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function selectPlan(plan) {
+            // Remove selected class from all cards
+            document.querySelectorAll('.plan-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selected class to chosen plan
+            document.getElementById(`${plan}-plan`).classList.add('selected');
+            
+            // In a real implementation, you would proceed to payment here
+            alert(`You've selected the ${plan} plan. Redirecting to payment...`);
+            
+            // Simulate payment redirection
+            setTimeout(() => {
+                window.location.href = 'payment.html'; // You would create this page
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
