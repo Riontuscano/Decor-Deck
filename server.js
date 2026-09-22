@@ -9,7 +9,7 @@ import fs from 'fs';
 dotenv.config();
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // Initialize Stripe and Gemini
 const stripeGateway = stripe(process.env.STRIPE_API);
@@ -29,6 +29,10 @@ app.use(
 );
 
 // Routes
+app.get("/ping", (req, res) => {
+  res.status(200).json({ status: "ok", message: "pong" });
+});
+
 app.get("/", (req, res) => {
   res.sendFile("index.html", { root: "public" });
 });
@@ -195,7 +199,37 @@ function formatKnowledgeResponse(knowledge) {
   return JSON.stringify(knowledge);
 }
 
+// 14-minute wake-up call to keep Render free tier awake (spins down after 15 minutes of inactivity)
+const WAKE_UP_INTERVAL_MS = (parseInt(process.env.PING_INTERVAL_MINUTES, 10) || 14) * 60 * 1000;
+
+function setupWakeUpCall() {
+  const url =
+    process.env.RENDER_EXTERNAL_URL ||
+    process.env.SERVER_URL ||
+    process.env.RENDER_URL ||
+    (process.env.RENDER_SERVICE_NAME ? `https://${process.env.RENDER_SERVICE_NAME}.onrender.com` : null);
+
+  if (!url) {
+    console.log("[Keep-Alive] RENDER_EXTERNAL_URL or SERVER_URL not defined. Skipping self-ping (set RENDER_EXTERNAL_URL or SERVER_URL to enable).");
+    return;
+  }
+
+  const pingUrl = `${url.replace(/\/+$/, "")}/ping`;
+  const intervalMinutes = Math.round(WAKE_UP_INTERVAL_MS / 60000);
+  console.log(`[Keep-Alive] Wake-up ping service initialized for ${pingUrl} (every ${intervalMinutes} minutes).`);
+
+  setInterval(async () => {
+    try {
+      const response = await fetch(pingUrl);
+      console.log(`[Keep-Alive] (${new Date().toLocaleTimeString()}) Ping sent to ${pingUrl} - Status: ${response.status}`);
+    } catch (err) {
+      console.error(`[Keep-Alive] (${new Date().toLocaleTimeString()}) Ping failed:`, err.message);
+    }
+  }, WAKE_UP_INTERVAL_MS);
+}
+
 // Start server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
+  setupWakeUpCall();
 });
