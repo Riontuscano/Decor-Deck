@@ -6,13 +6,14 @@ Decor-Deck is a furniture website with:
 * Stripe payment checkout (prices are set by the server, never the browser)
 * Gemini-powered AI chatbot
 * Knowledge-base driven chatbot responses
-* Google sign-in
+* Clerk authentication (sign-in required for checkout)
 * Static HTML pages served using Express
 
 ## Tech Stack
 
-* Node.js (18.18+)
+* Node.js (20.9+)
 * Express.js
+* Clerk (`@clerk/express` + ClerkJS)
 * Stripe
 * Google Gemini AI
 * helmet, express-rate-limit
@@ -33,7 +34,7 @@ project/
 │       ├── script.js          # Navbar, profile menu, cart (localStorage)
 │       ├── cart.js            # "Buy Now" -> POST /stripe-checkout
 │       ├── inspect.js         # Product preview popups (shop.html)
-│       └── profilelogin.js    # Google sign-in
+│       └── auth.js            # Clerk sign-in / profile menu, session tokens
 │
 ├── products.json              # Product catalogue: the source of truth for prices
 ├── decor-deck-knowledge.json  # Chatbot knowledge base
@@ -56,6 +57,8 @@ Then visit `http://localhost:3000`.
 
 | Variable         | Required | Description |
 | ---------------- | -------- | ----------- |
+| `CLERK_PUBLISHABLE_KEY` | Yes, for sign-in | Clerk publishable key (`pk_...`). Sent to the browser via `/api/config`. |
+| `CLERK_SECRET_KEY` | Yes, for sign-in | Clerk secret key (`sk_...`). Server only. Without Clerk keys, sign-in and checkout return 503. |
 | `STRIPE_API`     | Yes, for checkout | Stripe secret key. Without it, checkout returns 503. |
 | `GEMINI_API_KEY` | Yes, for the chatbot | Gemini API key. Without it, only knowledge-base answers work. |
 | `GEMINI_MODEL`   | No | Defaults to `gemini-2.5-flash`. |
@@ -68,8 +71,8 @@ Then visit `http://localhost:3000`.
 ## Deployment (Render)
 
 1. In Render, create a **Blueprint** from this repository (it reads `render.yaml`), or create a Web Service with build command `npm ci --omit=dev` and start command `npm start`.
-2. Set `STRIPE_API` and `GEMINI_API_KEY` in the service's environment.
-3. In Google Cloud Console, add your site URL with a trailing slash (e.g. `https://your-app.onrender.com/`) to the OAuth client's **Authorized redirect URIs** and **Authorized JavaScript origins**. Keep `http://localhost:3000/` for local development.
+2. Set `CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`, `STRIPE_API` and `GEMINI_API_KEY` in the service's environment.
+3. For production, use a Clerk production instance and add your domain in the Clerk Dashboard.
 
 GitHub Actions (`.github/workflows/ci.yml`) runs a syntax check and a smoke test on every push and pull request.
 
@@ -91,6 +94,8 @@ GitHub Actions (`.github/workflows/ci.yml`) runs a syntax check and a smoke test
 ```http
 POST /stripe-checkout
 ```
+
+Requires a signed-in Clerk user: send the session token as `Authorization: Bearer <token>` (the frontend does this via `getAuthToken()`). Returns 401 when signed out.
 
 The server looks up each product by name in `products.json` and uses its own price. Quantities must be whole numbers from 1 to 20.
 

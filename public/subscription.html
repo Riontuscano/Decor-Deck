@@ -230,9 +230,14 @@
 
             checkoutInProgress = true;
             try {
+                const token = await getAuthToken();
+                if (!token) {
+                    profilelogin();
+                    return;
+                }
                 const res = await fetch('/stripe-checkout', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                     body: JSON.stringify({ source: 'plan', items: [{ title: planNames[plan], quantity: 1 }] }),
                 });
                 const data = await res.json().catch(() => ({}));
@@ -240,15 +245,21 @@
                     window.location.href = data.url;
                     return;
                 }
+                if (res.status === 401) {
+                    profilelogin();
+                    return;
+                }
                 alert(data.error || 'Could not start checkout. Please try again.');
             } catch (err) {
                 alert('Could not reach the server. Please check your connection and try again.');
+            } finally {
+                checkoutInProgress = false;
             }
-            checkoutInProgress = false;
         }
 
         // Allow another attempt after returning from Stripe with the back button
         window.addEventListener('pageshow', () => { checkoutInProgress = false; });
     </script>
+    <script src="./js/auth.js"></script>
 </body>
 </html>

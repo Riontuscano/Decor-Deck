@@ -13,10 +13,17 @@ payBtn?.addEventListener('click', async () => {
 
   payBtn.disabled = true;
   try {
+    const token = await getAuthToken();
+    if (!token) {
+      profilelogin();
+      return;
+    }
+
     const res = await fetch('/stripe-checkout', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
       },
       body: JSON.stringify({
         items: items.map(({ title, quantity }) => ({ title, quantity })),
@@ -29,12 +36,17 @@ payBtn?.addEventListener('click', async () => {
       window.location.href = data.url;
       return;
     }
+    if (res.status === 401) {
+      profilelogin();
+      return;
+    }
     alert(data.error || 'Could not start checkout. Please try again.');
   } catch (err) {
     console.error(err);
     alert('Could not reach the server. Please check your connection and try again.');
+  } finally {
+    payBtn.disabled = false;
   }
-  payBtn.disabled = false;
 });
 
 // Re-enable the button when returning from Stripe via the back button (bfcache)

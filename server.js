@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import Stripe from "stripe";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import { clerkClient, clerkMiddleware, getAuth } from "@clerk/express";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import fs from "fs";
 import path from "path";
@@ -26,7 +27,11 @@ const stripeGateway = process.env.STRIPE_API ? new Stripe(process.env.STRIPE_API
 const genAI = process.env.GEMINI_API_KEY ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY) : null;
 const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 
+// Clerk handles sign-in; checkout requires a signed-in user
+const clerkEnabled = Boolean(process.env.CLERK_PUBLISHABLE_KEY && process.env.CLERK_SECRET_KEY);
+
 if (!stripeGateway) console.warn("[Config] STRIPE_API is not set - checkout is disabled.");
+if (!clerkEnabled) console.warn("[Config] CLERK_PUBLISHABLE_KEY / CLERK_SECRET_KEY are not set - sign-in and checkout are disabled.");
 if (!genAI) console.warn("[Config] GEMINI_API_KEY is not set - the chatbot will only answer from the knowledge base.");
 
 // Load knowledge base and product catalogue (the catalogue is the source of truth for prices)
@@ -55,6 +60,8 @@ app.disable("x-powered-by");
 app.use(helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }));
 app.use(express.json({ limit: "100kb" }));
 app.use(express.static(publicDir));
+// Session verification is only needed on API routes, not static files
+if (clerkEnabled) app.use(["/api", "/stripe-checkout"], clerkMiddleware());
 
 const jsonLimiter = (limit, message) =>
   rateLimit({
@@ -65,9 +72,27 @@ const jsonLimiter = (limit, message) =>
     message: { error: message },
   });
 
+// Rejects requests without a valid Clerk session (token sent as a Bearer header)
+function requireUser(req, res, next) {
+  if (!clerkEnabled) {
+    return res.status(503).json({ error: "Sign-in is currently unavailable." });
+  }
+  const { userId } = getAuth(req);
+  if (!userId) {
+    return res.status(401).json({ error: "Please sign in to continue." });
+  }
+  req.userId = userId;
+  next();
+}
+
 // Routes
 app.get("/ping", (req, res) => {
   res.status(200).json({ status: "ok", message: "pong" });
+});
+
+// Public settings the frontend needs (the publishable key is safe to expose)
+app.get("/api/config", (req, res) => {
+  res.json({ clerkPublishableKey: clerkEnabled ? process.env.CLERK_PUBLISHABLE_KEY : null });
 });
 
 app.get("/", (req, res) => {
@@ -94,7 +119,7 @@ app.get("/Hire", (req, res) => {
 const MAX_LINE_ITEMS = 50;
 const MAX_QUANTITY = 20;
 
-app.post("/stripe-checkout", jsonLimiter(10, "Too many checkout attempts. Please try again in a minute."), async (req, res) => {
+app.post("/stripe-checkout", jsonLimiter(10, "Too many checkout attempts. Please try again in a minute."), requireUser, async (req, res) => {
   if (!stripeGateway) {
     return res.status(503).json({ error: "Payments are currently unavailable." });
   }
@@ -134,6 +159,15 @@ app.post("/stripe-checkout", jsonLimiter(10, "Too many checkout attempts. Please
 
   const source = req.body.source === "plan" ? "plan" : "cart";
 
+  // Prefill the customer's email in Stripe; checkout still works if the lookup fails
+  let customerEmail;
+  try {
+    const user = await clerkClient.users.getUser(req.userId);
+    customerEmail = user.primaryEmailAddress?.emailAddress;
+  } catch (error) {
+    console.error("Clerk user lookup error:", error.message);
+  }
+
   try {
     const session = await stripeGateway.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -142,7 +176,9 @@ app.post("/stripe-checkout", jsonLimiter(10, "Too many checkout attempts. Please
       cancel_url: `${baseUrl}/cancel.html`,
       line_items: lineItems,
       billing_address_collection: "required",
-      metadata: { source },
+      client_reference_id: req.userId,
+      ...(customerEmail ? { customer_email: customerEmail } : {}),
+      metadata: { source, userId: req.userId },
     });
 
     res.json({ url: session.url });
