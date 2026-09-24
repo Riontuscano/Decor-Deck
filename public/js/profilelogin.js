@@ -1,18 +1,26 @@
 //login
+const GOOGLE_CLIENT_ID = "771114475204-olqejspffto4g9kikfqqcmbn3bakqd78.apps.googleusercontent.com";
+const DEFAULT_PROFILE_IMG = "./img/default-profile.png";
+
 function profilelogin(){
   let oauth2Endpoint = "https://accounts.google.com/o/oauth2/v2/auth";
 
+  // Random state protects against a forged redirect (checked when Google sends the user back)
+  const state = crypto.getRandomValues(new Uint32Array(4)).join("-");
+  sessionStorage.setItem("oauthState", state);
+
   let form = document.createElement("form");
-  form.setAttribute("method", "POST");
+  form.setAttribute("method", "GET");
   form.setAttribute("action",oauth2Endpoint);
 
   let params ={
-    "client_id":"771114475204-olqejspffto4g9kikfqqcmbn3bakqd78.apps.googleusercontent.com",
-    "redirect_uri":"http://localhost:3000",
+    "client_id": GOOGLE_CLIENT_ID,
+    // Must be listed under "Authorized redirect URIs" for this client in Google Cloud Console
+    "redirect_uri": window.location.origin + "/",
     "response_type":"token",
     "scope":"https://www.googleapis.com/auth/userinfo.profile",
     "include_granted_scopes":"true",
-    "state":"pass-through-value",
+    "state": state,
   }
   for (var key in params) {
     let input = document.createElement("input");
@@ -26,89 +34,101 @@ function profilelogin(){
   form.submit()
 }
 
-let profileparams={};
+// Google returns the token in the URL fragment: #state=...&access_token=...&expires_in=...
+function readTokenFromRedirect() {
+  const hashParams = new URLSearchParams(window.location.hash.slice(1));
+  if (!hashParams.has("access_token") && !hashParams.has("error")) return;
 
-let regex = /([^&=]+)=([^&]*)/g,m
-
-while(m= regex.exec(location.href)){
-  profileparams[decodeURIComponent(m[1])] = decodeURIComponent(m[2])
-}
-
-if(Object.keys(profileparams).length >0){
-  localStorage.setItem('authinfo',JSON.stringify(profileparams))
-}
-
-
-window.history.pushState({},document.title)
-
-let info = JSON.parse(localStorage.getItem('authinfo'))
-// console.log(JSON.parse(localStorage.getItem('authinfo')))
-// console.log(info['access_token'])
-// console.log(info['expires_in'])
-try {
-  fetch("https://www.googleapis.com/oauth2/v3/userinfo",{
-    headers: { 
-      'Authorization':`Bearer ${info['access_token']}`, 
+  const expectedState = sessionStorage.getItem("oauthState");
+  sessionStorage.removeItem("oauthState");
+  if (hashParams.has("access_token") && expectedState && hashParams.get("state") === expectedState) {
+    const expiresIn = parseInt(hashParams.get("expires_in"), 10) || 3600;
+    localStorage.setItem("authinfo", JSON.stringify({
+      access_token: hashParams.get("access_token"),
+      expires_at: Date.now() + expiresIn * 1000,
+    }));
   }
-  })
-  .then((data)=>data.json())
-  .then((info)=> {
-  
-      // console.log(info.email)
-   
+  // Remove the token from the address bar and history
+  window.history.replaceState(null, document.title, window.location.pathname + window.location.search);
+}
 
-      const demoname = info.name.split(" ")[0].toLowerCase();
-      const firstname = demoname.charAt(0).toUpperCase() + demoname.slice(1).toLowerCase()
-      const lastname = info.name.split(" ")[1]
-      
-      document.getElementById("profile-name").innerHTML += `${firstname} ${lastname}`;
-      if(info.picture){
-      document.getElementById("profile-img").setAttribute('src',info.picture != undefined ? info.picture :`https://avatar.iran.liara.run/username?username=[${firstname}+${lastname}]`);
-      document.getElementById("main-profile-img").setAttribute('src',info.picture != undefined ? info.picture :`https://avatar.iran.liara.run/username?username=[${firstname}+${lastname}]`);
-      }else{
-        document.getElementById("main-profile-img").setAttribute('src',"./img/default-profile.png");
-      }
-      if(info.name!=undefined){
-        document.getElementById("profile-logout").style.display="flex";
-        document.getElementById("profile-editprofile").style.display="flex";
-        document.getElementById("profile-login").style.display="none";
-        document.querySelector(".info-user").style.display="flex";
-        document.getElementById("cartbtn").style.display="flex";
-        document.getElementById("note").style.display="none";
-      }
-      else{
-        document.getElementById("profile-logout").style.display="none";
-        document.querySelector(".info-user").style.display="none";
-        document.getElementById("profile-editprofile").style.display="none";
-        document.getElementById("profile-login").style.display="flex";
-        document.getElementById("cartbtn").style.display="none";
-        document.getElementById("note").style.display="block";
-      }
+function getStoredAuth() {
+  try {
+    const auth = JSON.parse(localStorage.getItem("authinfo"));
+    if (auth?.access_token && (!auth.expires_at || auth.expires_at > Date.now())) return auth;
+  } catch (e) {
+    // fall through to clearing invalid data
+  }
+  localStorage.removeItem("authinfo");
+  return null;
+}
+
+function setDisplay(selector, value) {
+  const element = document.querySelector(selector);
+  if (element) element.style.display = value;
+}
+
+function setLoggedIn(loggedIn) {
+  setDisplay("#profile-logout", loggedIn ? "flex" : "none");
+  setDisplay("#profile-editprofile", loggedIn ? "flex" : "none");
+  setDisplay("#profile-login", loggedIn ? "none" : "flex");
+  setDisplay(".info-user", loggedIn ? "flex" : "none");
+  setDisplay("#cartbtn", loggedIn ? "flex" : "none");
+  setDisplay("#note", loggedIn ? "none" : "block");
+  if (!loggedIn) {
+    document.getElementById("main-profile-img")?.setAttribute("src", DEFAULT_PROFILE_IMG);
+  }
+}
+
+function showProfile(user) {
+  const [first = "", last = ""] = (user.name || "").split(" ");
+  const firstname = first.charAt(0).toUpperCase() + first.slice(1).toLowerCase();
+  const profileName = document.getElementById("profile-name");
+  if (profileName) profileName.textContent = `${firstname} ${last}`.trim();
+
+  const picture = user.picture || DEFAULT_PROFILE_IMG;
+  document.getElementById("profile-img")?.setAttribute("src", picture);
+  document.getElementById("main-profile-img")?.setAttribute("src", picture);
+  setLoggedIn(true);
+}
+
+readTokenFromRedirect();
+let info = getStoredAuth();
+
+if (info) {
+  fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+    headers: { 'Authorization': `Bearer ${info.access_token}` },
   })
-} catch (error) {
-  document.getElementById("cartbtn").style.display="none";
+    .then((res) => {
+      if (!res.ok) throw new Error(`userinfo failed: ${res.status}`);
+      return res.json();
+    })
+    .then(showProfile)
+    .catch((error) => {
+      console.error(error);
+      localStorage.removeItem("authinfo");
+      info = null;
+      setLoggedIn(false);
+    });
+} else {
+  setLoggedIn(false);
 }
 
 
 function profilelogout() {
-  fetch("https://oauth2.googleapis.com/revoke?token=" + info['access_token'], {
-    method: 'POST',
-    headers: {
-      'Content-type': 'application/x-www-form-urlencoded'
-    }
-  })
-  .then((data) => {
+  const token = info?.access_token;
+  localStorage.removeItem("authinfo");
+  info = null;
+  setLoggedIn(false);
 
-    document.getElementById("profile-logout").style.display = "none";
-    document.querySelector(".info-user").style.display = "none";
-    document.getElementById("profile-editprofile").style.display = "none";
-    document.getElementById("profile-login").style.display = "flex";
-    document.getElementById("cartbtn").style.display="none";
-    document.getElementById("note").style.display="block";
-    document.getElementById("main-profile-img").setAttribute('src',"./img/default-profile.png");
-
-  })
-  .catch((error) => {
-    console.error('Logout failed:', error);
-  });
+  if (token) {
+    fetch("https://oauth2.googleapis.com/revoke?token=" + encodeURIComponent(token), {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/x-www-form-urlencoded'
+      }
+    }).catch((error) => {
+      console.error('Token revoke failed:', error);
+    });
+  }
 }

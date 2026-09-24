@@ -2,107 +2,76 @@
 
 Decor-Deck is a furniture website with:
 
-* Product browsing
-* Stripe payment checkout
+* Product browsing and a cart
+* Stripe payment checkout (prices are set by the server, never the browser)
 * Gemini-powered AI chatbot
 * Knowledge-base driven chatbot responses
+* Google sign-in
 * Static HTML pages served using Express
 
 ## Tech Stack
 
-* Node.js
+* Node.js (18.18+)
 * Express.js
 * Stripe
 * Google Gemini AI
-* CORS
+* helmet, express-rate-limit
 * dotenv
 
-## Project Setup
-
-### 1. Clone the project
-
-```bash
-git clone <your-repository-url>
-cd <project-folder>
-```
-
-### 2. Install dependencies
-
-```bash
-npm install
-```
-
-### 3. Create `.env`
-
-Create a `.env` file in the root directory:
-
-```env
-STRIPE_API=your_stripe_secret_key
-```
-
-> Keep your API keys private. Do not commit `.env` to GitHub.
-
-Add `.env` to `.gitignore`:
-
-```gitignore
-node_modules/
-.env
-```
-
-### 4. Check required files
-
-Make sure your project contains:
+## Project Structure
 
 ```text
 project/
-├── public/
-│   ├── index.html
-│   ├── success.html
+├── public/                    # Static frontend (HTML, CSS, JS, images)
+│   ├── index.html             # Home page + chatbot
+│   ├── shop.html, shop2.html, shop3.html
+│   ├── designer.html          # Hire a designer (served at /Hire)
+│   ├── subscription.html      # AI design plans (Stripe checkout)
+│   ├── success.html           # Confirms the Stripe payment, then clears the cart
 │   ├── cancel.html
-│   ├── about.html
-│   └── designer.html
+│   └── js/
+│       ├── script.js          # Navbar, profile menu, cart (localStorage)
+│       ├── cart.js            # "Buy Now" -> POST /stripe-checkout
+│       ├── inspect.js         # Product preview popups (shop.html)
+│       └── profilelogin.js    # Google sign-in
 │
-├── decor-deck-knowledge.json
+├── products.json              # Product catalogue: the source of truth for prices
+├── decor-deck-knowledge.json  # Chatbot knowledge base
 ├── server.js
-├── package.json
-├── .env
-└── README.md
+├── render.yaml                # Render deployment blueprint
+└── .env.example
 ```
 
-### 5. Start the server
-
-For normal execution:
+## Local Setup
 
 ```bash
-node server.js
+npm install
+cp .env.example .env   # then fill in the keys
+npm run dev            # auto-restarts on changes (or: npm start)
 ```
 
-The server will start at:
+Then visit `http://localhost:3000`.
 
-```text
-http://localhost:3000
-```
+## Environment Variables
 
-Open this URL in your browser.
+| Variable         | Required | Description |
+| ---------------- | -------- | ----------- |
+| `STRIPE_API`     | Yes, for checkout | Stripe secret key. Without it, checkout returns 503. |
+| `GEMINI_API_KEY` | Yes, for the chatbot | Gemini API key. Without it, only knowledge-base answers work. |
+| `GEMINI_MODEL`   | No | Defaults to `gemini-2.5-flash`. |
+| `PUBLIC_URL`     | No | Public site URL for Stripe redirects and product images. Defaults to `RENDER_EXTERNAL_URL`, then the request host. |
+| `NODE_ENV`       | No | `development` includes chatbot error details in API responses. |
+| `PING_INTERVAL_MINUTES` | No | Keep-alive ping interval on Render (default 14). |
 
-## Development
+> Never commit `.env` or put keys in `server.js` or frontend code.
 
-If you have `nodemon` installed:
+## Deployment (Render)
 
-```bash
-npm run dev
-```
+1. In Render, create a **Blueprint** from this repository (it reads `render.yaml`), or create a Web Service with build command `npm ci --omit=dev` and start command `npm start`.
+2. Set `STRIPE_API` and `GEMINI_API_KEY` in the service's environment.
+3. In Google Cloud Console, add your site URL with a trailing slash (e.g. `https://your-app.onrender.com/`) to the OAuth client's **Authorized redirect URIs** and **Authorized JavaScript origins**. Keep `http://localhost:3000/` for local development.
 
-Example `package.json` scripts:
-
-```json
-{
-  "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
-  }
-}
-```
+GitHub Actions (`.github/workflows/ci.yml`) runs a syntax check and a smoke test on every push and pull request.
 
 ## API Routes
 
@@ -115,6 +84,7 @@ Example `package.json` scripts:
 | GET    | `/success` | Successful payment page |
 | GET    | `/cancel`  | Cancelled payment page  |
 | GET    | `/Hire`    | Designer page           |
+| GET    | `/ping`    | Health check            |
 
 ### Stripe
 
@@ -122,30 +92,29 @@ Example `package.json` scripts:
 POST /stripe-checkout
 ```
 
-Example request:
+The server looks up each product by name in `products.json` and uses its own price. Quantities must be whole numbers from 1 to 20.
 
 ```json
 {
   "items": [
-    {
-      "title": "Modern Chair",
-      "price": "4999",
-      "quantity": 1,
-      "productImg": "https://example.com/chair.jpg"
-    }
+    { "title": "Grey Chair", "quantity": 2 }
   ]
 }
 ```
 
-The API returns a Stripe Checkout URL.
+Returns `{ "url": "<Stripe Checkout URL>" }`, or `{ "error": "..." }` with status 400/503/502. Rate limited to 10 requests per minute per IP.
+
+```http
+GET /api/checkout-session/:id
+```
+
+Used by `success.html` to confirm the payment. Returns `{ "paymentStatus": "paid", "source": "cart" }`.
 
 ### AI Chatbot
 
 ```http
 POST /api/chat
 ```
-
-Example request:
 
 ```json
 {
@@ -154,102 +123,12 @@ Example request:
 }
 ```
 
-Example response:
-
-```json
-{
-  "response": "Decor-Deck is a furniture store...",
-  "chatHistory": []
-}
-```
+Returns `{ "response": "...", "chatHistory": [...] }`. Messages are limited to 1000 characters, and only the last 20 history turns are used. Rate limited to 20 requests per minute per IP.
 
 ## Knowledge Base
 
-The chatbot uses:
+The chatbot answers common questions (about the store, AR features, policies, product categories and materials) directly from `decor-deck-knowledge.json`. Other questions go to Gemini with the knowledge base and product list as system context.
 
-```text
-decor-deck-knowledge.json
-```
+## Changing Products or Prices
 
-This file contains information about:
-
-* Website
-* Products
-* Categories
-* Materials
-* AR features
-* Policies
-* Shipping
-* Warranty
-* Returns
-
-Common questions are answered directly from the knowledge base. Other questions are processed using Google Gemini with the knowledge base provided as context.
-
-## Environment Variables
-
-| Variable     | Description             |
-| ------------ | ----------------------- |
-| `STRIPE_API` | Stripe secret API key   |
-| `NODE_ENV`   | Application environment |
-
-Example:
-
-```env
-STRIPE_API=sk_test_xxxxxxxxxxxxx
-NODE_ENV=development
-```
-
-## Important Security Note
-
-Do **not** hard-code API keys inside `server.js`.
-
-For example, avoid:
-
-```js
-const genAI = new GoogleGenerativeAI("YOUR_API_KEY");
-```
-
-Instead, use an environment variable:
-
-```env
-GEMINI_API_KEY=your_gemini_api_key
-```
-
-And in `server.js`:
-
-```js
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-```
-
-Then your initialization becomes:
-
-```js
-const stripeGateway = stripe(process.env.STRIPE_API);
-
-const genAI = new GoogleGenerativeAI(
-  process.env.GEMINI_API_KEY
-);
-```
-
-## Running the Project
-
-After configuring `.env`:
-
-```bash
-npm install
-npm start
-```
-
-Then visit:
-
-```text
-http://localhost:3000
-```
-
-## Notes
-
-* Stripe test keys should be used during development.
-* Never expose Stripe secret keys or Gemini API keys in frontend code.
-* Make sure `decor-deck-knowledge.json` exists in the project root.
-* The application currently runs on port `3000`.
-* For production deployment, update the Stripe success/cancel URLs from `localhost` to your deployed domain.
+Update `products.json` **and** the matching product cards in the HTML pages. The product name is used as the lookup key, so it must match the card's title (case-insensitive).

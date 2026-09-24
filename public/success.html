@@ -9,10 +9,40 @@
 </head>
 <body>
         <div class="sc-container">
-            <h1>Payment Successful</h1>
-            <p>Your order will arrive in 8-12 business days.</p>
+            <h1 id="status-title">Confirming your payment...</h1>
+            <p id="status-message"></p>
             <img src="img/succes-final.png" alt="succes-final"/>
             <a href="index.html" class="back-btn">Continue Shopping.....</a>
         </div>
+    <script>
+        (async function confirmPayment() {
+            const title = document.getElementById('status-title');
+            const message = document.getElementById('status-message');
+            const sessionId = new URLSearchParams(window.location.search).get('session_id');
+
+            try {
+                if (!sessionId) throw new Error('Missing session id');
+                const res = await fetch(`/api/checkout-session/${encodeURIComponent(sessionId)}`);
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error);
+
+                if (data.paymentStatus === 'paid') {
+                    title.textContent = 'Payment Successful';
+                    if (data.source === 'plan') {
+                        message.textContent = 'Thank you for purchasing an AI design plan.';
+                    } else {
+                        message.textContent = 'Your order will arrive in 8-12 business days.';
+                        localStorage.removeItem('cartItems');
+                    }
+                } else {
+                    title.textContent = 'Payment Processing';
+                    message.textContent = "Your payment is still being processed. If it doesn't go through, contact decordeck.work@gmail.com.";
+                }
+            } catch (err) {
+                title.textContent = 'Thank You!';
+                message.textContent = "We couldn't confirm your payment here. For help, contact decordeck.work@gmail.com.";
+            }
+        })();
+    </script>
 </body>
 </html>

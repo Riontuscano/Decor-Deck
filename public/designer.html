@@ -791,7 +791,6 @@
     </button>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script>
@@ -806,56 +805,33 @@
             const designer = document.getElementById('designer').value;
             const projectDetails = document.getElementById('projectDetails').value;
             
-            // Here you would typically send this data to your server
-            console.log('Form submitted:', { name, email, phone, designer, projectDetails });
-            
-            // Show success message
-            alert(`Thank you, ${name}! Your request to work with ${designer} has been submitted. We'll contact you shortly.`);
-            
-            // Reset form
+            // Send the request to the studio inbox through the visitor's email app
+            const subject = `Designer request: ${designer}`;
+            const body = `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nDesigner: ${designer}\n\nProject details:\n${projectDetails}`;
+            window.location.href = `mailto:decordeck.work@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+            alert(`Thanks, ${name}! Your email app will open with your request to ${designer} filled in - just press Send.`);
             this.reset();
         });
         
-        // Chatbot toggle functionality
+        // The assistant lives on the home page
         document.getElementById('chatbotToggle').addEventListener('click', function() {
-            // This would open your chatbot interface
-            alert('Chatbot feature will open here. Connect to your existing chatbot implementation.');
+            window.location.href = '/#chat';
         });
-        
-        // Navbar toggle functionality
-        let menuIcon = document.querySelector('#menu-icon');
-        let navbar = document.querySelector('.navbar');
-        
-        menuIcon.onclick = () => {
-            menuIcon.classList.toggle('bx-x');
-            navbar.classList.toggle('active');
-        }
-        
-        // Profile toggle functionality
-        function toggleprofile() {
-            document.getElementById("subwrap").classList.toggle("open-menu");
-        }
-        
-        // Close navbar when clicking on a link
+
+        // Navbar/cart toggles come from script.js; this adds the close icon and link behaviour
+        document.querySelector('#menu-icon').addEventListener('click', function() {
+            this.classList.toggle('bx-x');
+        });
         document.querySelectorAll('.navbar a').forEach(link => {
             link.addEventListener('click', () => {
-                menuIcon.classList.remove('bx-x');
-                navbar.classList.remove('active');
+                document.querySelector('#menu-icon').classList.remove('bx-x');
+                document.querySelector('.navbar').classList.remove('active');
             });
         });
-        
-        // Cart functionality
-        let cartIcon = document.querySelector('#nav-cart');
-        let cart = document.querySelector('.cart');
-        let closeCart = document.querySelector('#close-cart');
-        
-        cartIcon.onclick = () => {
-            cart.classList.add('active');
-        }
-        
-        closeCart.onclick = () => {
-            cart.classList.remove('active');
-        }
     </script>
+    <script src="./js/script.js"></script>
+    <script src="./js/cart.js"></script>
+    <script src="./js/profilelogin.js"></script>
 </body>
 </html>

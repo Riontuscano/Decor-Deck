@@ -1,0 +1,33 @@
+[
+  { "name": "Pink Lawn Chair", "price": 5999, "image": "/img/chair5.jpg", "category": "Chairs" },
+  { "name": "Grey Chair", "price": 3499, "image": "/img/chair2.jpg", "category": "Chairs" },
+  { "name": "Massage Chair", "price": 19999, "image": "/img/chair3.jpg", "category": "Chairs" },
+  { "name": "Sofa Chair", "price": 14999, "image": "/img/chair4.webp", "category": "Chairs" },
+  { "name": "Orange Cushion Chair", "price": 6999, "image": "/img/chair1.jpg", "category": "Chairs" },
+  { "name": "Gaming Chair", "price": 12999, "image": "/img/chair6.webp", "category": "Chairs" },
+
+  { "name": "Standard Sofa", "price": 25999, "image": "/img/sofa1.png", "category": "Sofas" },
+  { "name": "Pink Curved Sofa", "price": 24499, "image": "/img/sofa2.png", "category": "Sofas" },
+  { "name": "Pink sofa Chair", "price": 29999, "image": "/img/sofa3.png", "category": "Sofas" },
+  { "name": "Low Level Sofa", "price": 21999, "image": "/img/sofa4.png", "category": "Sofas" },
+  { "name": "Red Velvet Sofa", "price": 16999, "image": "/img/sofa5.png", "category": "Sofas" },
+  { "name": "Smooth pink sofa", "price": 15999, "image": "/img/sofa6.png", "category": "Sofas" },
+
+  { "name": "Black Bed", "price": 25999, "image": "/img/bed1.jpeg", "category": "Beds" },
+  { "name": "Square black bed", "price": 31499, "image": "/img/bed2.jpeg", "category": "Beds" },
+  { "name": "Wodden Bed", "price": 34999, "image": "/img/bed3.jpeg", "category": "Beds" },
+  { "name": "Funcky Bed", "price": 20999, "image": "/img/bed4.jpeg", "category": "Beds" },
+  { "name": "Cyan Browny Bed", "price": 23999, "image": "/img/bed5.jpeg", "category": "Beds" },
+  { "name": "Grey Scale bed", "price": 22999, "image": "/img/bed6.jpeg", "category": "Beds" },
+
+  { "name": "Family Size Table", "price": 15999, "image": "/img/table1.jpeg", "category": "Tables" },
+  { "name": "Low Ground table", "price": 8499, "image": "/img/table2.jpeg", "category": "Tables" },
+  { "name": "Wooden Table", "price": 9999, "image": "/img/table3.jpeg", "category": "Tables" },
+  { "name": "Modern Japanese Table", "price": 10999, "image": "/img/table4.jpeg", "category": "Tables" },
+  { "name": "Orignal japanese Table", "price": 6999, "image": "/img/table5.jpeg", "category": "Tables" },
+  { "name": "Coffee Table", "price": 7999, "image": "/img/table6.jpeg", "category": "Tables" },
+
+  { "name": "Basic Plan", "price": 499, "image": null, "category": "AI Design Plans" },
+  { "name": "Standard Plan", "price": 1999, "image": null, "category": "AI Design Plans" },
+  { "name": "Premium Plan", "price": 3999, "image": null, "category": "AI Design Plans" }
+]

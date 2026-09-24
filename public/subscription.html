@@ -220,12 +220,35 @@
     </div>
 
     <script>
-        function selectPlan(plan) {
+        const planNames = { basic: 'Basic Plan', standard: 'Standard Plan', premium: 'Premium Plan' };
+        let checkoutInProgress = false;
+
+        async function selectPlan(plan) {
+            if (checkoutInProgress) return;
             document.querySelectorAll('.plan-card').forEach(card => card.classList.remove('selected'));
             document.getElementById(`${plan}-plan`).classList.add('selected');
-            alert(`You've selected the ${plan} plan. Redirecting to payment...`);
-            setTimeout(() => window.location.href = 'payment.html', 1500);
+
+            checkoutInProgress = true;
+            try {
+                const res = await fetch('/stripe-checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ source: 'plan', items: [{ title: planNames[plan], quantity: 1 }] }),
+                });
+                const data = await res.json().catch(() => ({}));
+                if (res.ok && data.url) {
+                    window.location.href = data.url;
+                    return;
+                }
+                alert(data.error || 'Could not start checkout. Please try again.');
+            } catch (err) {
+                alert('Could not reach the server. Please check your connection and try again.');
+            }
+            checkoutInProgress = false;
         }
+
+        // Allow another attempt after returning from Stripe with the back button
+        window.addEventListener('pageshow', () => { checkoutInProgress = false; });
     </script>
 </body>
 </html>

@@ -1,32 +1,69 @@
 import express from "express";
 import dotenv from "dotenv";
-import stripe from "stripe";
-import bodyParser from "body-parser";
-import cors from 'cors';
+import Stripe from "stripe";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import fs from 'fs';
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const publicDir = path.join(__dirname, "public");
+const readJson = (file) => JSON.parse(fs.readFileSync(path.join(__dirname, file), "utf8"));
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Initialize Stripe and Gemini
-const stripeGateway = stripe(process.env.STRIPE_API);
-const genAI = new GoogleGenerativeAI("AIzaSyBaxGYUSZqeGOrEj_mPQ94kCuuQ58YBn28");
+// Public base URL used for Stripe redirects and product images.
+// Render sets RENDER_EXTERNAL_URL automatically; PUBLIC_URL overrides it.
+const PUBLIC_URL = (process.env.PUBLIC_URL || process.env.RENDER_EXTERNAL_URL || "").replace(/\/+$/, "");
 
-// Load knowledge base
-const knowledgeBase = JSON.parse(fs.readFileSync('./decor-deck-knowledge.json'));
+// Initialize Stripe and Gemini (both optional so the static site still works without them)
+const stripeGateway = process.env.STRIPE_API ? new Stripe(process.env.STRIPE_API) : null;
+const genAI = process.env.GEMINI_API_KEY ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY) : null;
+const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+
+if (!stripeGateway) console.warn("[Config] STRIPE_API is not set - checkout is disabled.");
+if (!genAI) console.warn("[Config] GEMINI_API_KEY is not set - the chatbot will only answer from the knowledge base.");
+
+// Load knowledge base and product catalogue (the catalogue is the source of truth for prices)
+const knowledgeBase = readJson("decor-deck-knowledge.json");
+const catalog = readJson("products.json");
+const normalizeName = (name) => String(name ?? "").trim().replace(/\s+/g, " ").toLowerCase();
+const productsByName = new Map(catalog.map((product) => [normalizeName(product.name), product]));
+
+const chatModel = genAI?.getGenerativeModel({
+  model: GEMINI_MODEL,
+  systemInstruction:
+    "You are a customer service assistant for the Decor-Deck furniture store. " +
+    "Answer questions accurately using only this store information and product list. " +
+    "Reply in plain text without HTML.\n" +
+    `Store information: ${JSON.stringify(knowledgeBase)}\n` +
+    `Products (prices in INR): ${JSON.stringify(catalog.map(({ name, price, category }) => ({ name, price, category })))}`,
+  generationConfig: {
+    maxOutputTokens: 1000,
+  },
+});
 
 // Middleware
-app.use(bodyParser.json());
-app.use(express.static("public"));
-app.use(express.json());
-app.use(
-  cors({
-    origin: ["http://localhost:3000", "https://checkout.stripe.com"],
-  })
-);
+app.set("trust proxy", 1); // Render terminates TLS at its proxy
+app.disable("x-powered-by");
+// The pages load scripts/styles from several CDNs and use inline scripts, so CSP stays off.
+app.use(helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }));
+app.use(express.json({ limit: "100kb" }));
+app.use(express.static(publicDir));
+
+const jsonLimiter = (limit, message) =>
+  rateLimit({
+    windowMs: 60 * 1000,
+    limit,
+    standardHeaders: "draft-7",
+    legacyHeaders: false,
+    message: { error: message },
+  });
 
 // Routes
 app.get("/ping", (req, res) => {
@@ -34,120 +71,160 @@ app.get("/ping", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.sendFile("index.html", { root: "public" });
+  res.sendFile("index.html", { root: publicDir });
 });
 
 app.get("/success", (req, res) => {
-  res.sendFile("success.html", { root: "public" });
+  res.sendFile("success.html", { root: publicDir });
 });
 
 app.get("/about", (req, res) => {
-  res.sendFile("about.html", { root: "public" });
+  res.sendFile("about.html", { root: publicDir });
 });
 
 app.get("/cancel", (req, res) => {
-  res.sendFile("cancel.html", { root: "public" });
+  res.sendFile("cancel.html", { root: publicDir });
 });
 
 app.get("/Hire", (req, res) => {
-  res.sendFile("designer.html", { root: "public" });
+  res.sendFile("designer.html", { root: publicDir });
 });
 
 // Stripe Checkout Route
-app.post("/stripe-checkout", async (req, res) => {
-  try {
-    if (!req.body || !req.body.items) {
-      throw new Error("Invalid request body");
+const MAX_LINE_ITEMS = 50;
+const MAX_QUANTITY = 20;
+
+app.post("/stripe-checkout", jsonLimiter(10, "Too many checkout attempts. Please try again in a minute."), async (req, res) => {
+  if (!stripeGateway) {
+    return res.status(503).json({ error: "Payments are currently unavailable." });
+  }
+
+  const items = req.body?.items;
+  if (!Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ error: "Your cart is empty." });
+  }
+  if (items.length > MAX_LINE_ITEMS) {
+    return res.status(400).json({ error: "Too many items in cart." });
+  }
+
+  const baseUrl = PUBLIC_URL || `${req.protocol}://${req.get("host")}`;
+  const lineItems = [];
+  for (const item of items) {
+    const product = productsByName.get(normalizeName(item?.title));
+    if (!product) {
+      return res.status(400).json({ error: `Unknown product: ${String(item?.title ?? "").slice(0, 100)}` });
     }
-
-    const lineItems = req.body.items.map((item) => {
-      const unitAmount = parseInt(parseFloat(item.price) * 100);
-      return {
-        price_data: {
-          currency: "inr",
-          product_data: {
-            name: item.title,
-            images: [item.productImg],
-          },
-          unit_amount: unitAmount,
+    const quantity = Number(item.quantity);
+    if (!Number.isInteger(quantity) || quantity < 1 || quantity > MAX_QUANTITY) {
+      return res.status(400).json({ error: `Quantity for ${product.name} must be between 1 and ${MAX_QUANTITY}.` });
+    }
+    lineItems.push({
+      price_data: {
+        currency: "inr",
+        product_data: {
+          name: product.name,
+          // Stripe can only display images it can reach over HTTPS
+          ...(product.image && baseUrl.startsWith("https://") ? { images: [`${baseUrl}${product.image}`] } : {}),
         },
-        quantity: item.quantity,
-      };
+        unit_amount: product.price * 100,
+      },
+      quantity,
     });
+  }
 
+  const source = req.body.source === "plan" ? "plan" : "cart";
+
+  try {
     const session = await stripeGateway.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
-      success_url: `http://localhost:3000/success.html`,
-      cancel_url: `http://localhost:3000/cancel.html`,
+      success_url: `${baseUrl}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/cancel.html`,
       line_items: lineItems,
       billing_address_collection: "required",
+      metadata: { source },
     });
 
     res.json({ url: session.url });
   } catch (error) {
-    console.error(error);
-    res.status(400).json({ error: error.message });
+    console.error("Stripe checkout error:", error.message);
+    res.status(502).json({ error: "Could not start checkout. Please try again." });
+  }
+});
+
+// Lets the success page confirm the payment before clearing the cart
+app.get("/api/checkout-session/:id", jsonLimiter(30, "Too many requests."), async (req, res) => {
+  if (!stripeGateway) {
+    return res.status(503).json({ error: "Payments are currently unavailable." });
+  }
+  if (!/^cs_[A-Za-z0-9_]+$/.test(req.params.id)) {
+    return res.status(400).json({ error: "Invalid session id." });
+  }
+
+  try {
+    const session = await stripeGateway.checkout.sessions.retrieve(req.params.id);
+    res.json({ paymentStatus: session.payment_status, source: session.metadata?.source || "cart" });
+  } catch (error) {
+    console.error("Stripe session lookup error:", error.message);
+    res.status(404).json({ error: "Checkout session not found." });
   }
 });
 
 // Enhanced Chatbot Route with Knowledge Base
-app.post("/api/chat", async (req, res) => {
+const MAX_MESSAGE_LENGTH = 1000;
+const MAX_HISTORY_TURNS = 20;
+
+// Common questions answered straight from the knowledge base
+const knowledgeRoutes = [
+  { key: "website_info", pattern: /\b(what is|about) (decor[- ]?deck|this (web)?site|your (web)?site|your (company|store))\b/ },
+  { key: "ar_features", pattern: /\b(ar features?|augmented reality|try in ar)\b/ },
+  { key: "policies", pattern: /\b(return policy|returns|refunds?|warranty|shipping|delivery)\b/ },
+  { key: "products", pattern: /\b(categories|materials|what (products|do you sell))\b/ },
+];
+
+// Keeps only well-formed text turns that Gemini accepts: starts with "user",
+// alternates roles, ends with "model", and is capped in length.
+function sanitizeHistory(history) {
+  if (!Array.isArray(history)) return [];
+
+  const turns = [];
+  for (const turn of history.slice(-MAX_HISTORY_TURNS)) {
+    const text = turn?.parts?.[0]?.text;
+    if ((turn?.role !== "user" && turn?.role !== "model") || typeof text !== "string") continue;
+    const expectedRole = turns.length % 2 === 0 ? "user" : "model";
+    if (turn.role !== expectedRole) continue;
+    turns.push({ role: turn.role, parts: [{ text: text.slice(0, 4000) }] });
+  }
+  if (turns.length % 2 === 1) turns.pop();
+  return turns;
+}
+
+app.post("/api/chat", jsonLimiter(20, "Too many messages. Please wait a minute and try again."), async (req, res) => {
+  const message = typeof req.body?.message === "string" ? req.body.message.trim() : "";
+  if (!message) {
+    return res.status(400).json({ error: "Message is required." });
+  }
+  if (message.length > MAX_MESSAGE_LENGTH) {
+    return res.status(400).json({ error: `Message must be at most ${MAX_MESSAGE_LENGTH} characters.` });
+  }
+
+  const chatHistory = sanitizeHistory(req.body.chatHistory);
+  const lowerMessage = message.toLowerCase();
+
+  const route = knowledgeRoutes.find(({ pattern }) => pattern.test(lowerMessage));
+  if (route) {
+    return respondWithKnowledge(res, route.key, message, chatHistory);
+  }
+
+  if (!chatModel) {
+    return res.status(503).json({ error: "The assistant is currently unavailable." });
+  }
+
   try {
-    const { message, chatHistory = [] } = req.body;
-    
-    // Common questions handling using knowledge base
-    const lowerMessage = message.toLowerCase();
-    
-    if (lowerMessage.includes('what is decor-deck') || 
-        lowerMessage.includes('about this website') ||
-        lowerMessage.includes('tell me about')) {
-      return respondWithKnowledge(res, 'website_info', message, chatHistory);
-    }
-
-    if (lowerMessage.includes('ar feature') || 
-        lowerMessage.includes('augmented reality')) {
-      return respondWithKnowledge(res, 'ar_features', message, chatHistory);
-    }
-
-    if (lowerMessage.includes('return policy') || 
-        lowerMessage.includes('warranty') ||
-        lowerMessage.includes('shipping')) {
-      return respondWithKnowledge(res, 'policies', message, chatHistory);
-    }
-
-    if (lowerMessage.includes('products') || 
-        lowerMessage.includes('categories') ||
-        lowerMessage.includes('materials')) {
-      return respondWithKnowledge(res, 'products', message, chatHistory);
-    }
-
-    // For other questions, use Gemini with the knowledge base as context
-    const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
-      generationConfig: {
-        maxOutputTokens: 1000,
-      },
-    });
-
-    // Start chat with knowledge base as initial context
-    const chat = model.startChat({
-      history: [
-        {
-          role: "user",
-          parts: [{ text: `You are a customer service assistant for Decor-Deck furniture store. Here's important information: ${JSON.stringify(knowledgeBase)}. Use this to answer questions accurately.` }]
-        },
-        {
-          role: "model",
-          parts: [{ text: "Understood. I'll use the provided information to assist customers with Decor-Deck products and services." }]
-        },
-        ...chatHistory
-      ]
-    });
-
+    // For other questions, use Gemini with the knowledge base as system context
+    const chat = chatModel.startChat({ history: chatHistory });
     const result = await chat.sendMessage(message);
-    const response = await result.response;
-    const text = response.text();
+    const text = result.response.text();
 
     res.json({
       response: text,
@@ -160,7 +237,7 @@ app.post("/api/chat", async (req, res) => {
 
   } catch (error) {
     console.error("Chat Error:", error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: "Sorry, I encountered an issue.",
       details: process.env.NODE_ENV === "development" ? error.message : undefined
     });
@@ -185,19 +262,27 @@ function formatKnowledgeResponse(knowledge) {
   if (typeof knowledge === 'string') {
     return knowledge;
   }
-  
+
   if (Array.isArray(knowledge)) {
     return knowledge.join(', ');
   }
-  
+
   if (typeof knowledge === 'object') {
-    return Object.entries(knowledge).map(([key, value]) => 
+    return Object.entries(knowledge).map(([key, value]) =>
       `${key}: ${formatKnowledgeResponse(value)}`
     ).join('\n');
   }
-  
+
   return JSON.stringify(knowledge);
 }
+
+// JSON errors (malformed bodies, oversized payloads) without stack traces
+app.use((err, req, res, next) => {
+  if (res.headersSent) return next(err);
+  const status = err.status || err.statusCode || 500;
+  if (status >= 500) console.error(err);
+  res.status(status).json({ error: status >= 500 ? "Internal server error." : "Invalid request." });
+});
 
 // 14-minute wake-up call to keep Render free tier awake (spins down after 15 minutes of inactivity)
 const WAKE_UP_INTERVAL_MS = (parseInt(process.env.PING_INTERVAL_MINUTES, 10) || 14) * 60 * 1000;

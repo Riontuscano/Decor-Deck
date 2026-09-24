@@ -17,7 +17,7 @@
       }
     },
     "products": {
-      "categories": ["Chairs", "Sofas", "Tables", "Beds", "Storage"],
+      "categories": ["Chairs", "Sofas", "Tables", "Beds"],
       "materials": ["Wood", "Metal", "Fabric", "Leather", "Plastic"]
     },
     "policies": {
